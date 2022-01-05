@@ -10,12 +10,6 @@
   padding: 0;
   box-sizing: border-box;
   max-width: 336px;
-  height: 73px;
   color: #fff;
   align-items: center;
-}
-@media (max-width: 1040px) {
-  .profile__info{
-    height: 54px;
-  }
 }

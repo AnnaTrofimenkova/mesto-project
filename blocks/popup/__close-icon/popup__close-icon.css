@@ -4,6 +4,14 @@
   align-self: flex-end;
   cursor: pointer;
   margin-bottom: 8px;
+  border: none;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+  background-image: url(../../../images/Close-Icon.png);
+  background-size: cover;
+  background-position: center;
+
 }
 .popup__close-icon:hover{
   opacity: 0.6;
