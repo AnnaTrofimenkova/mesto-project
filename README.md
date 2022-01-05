@@ -1,5 +1,5 @@
 # Проект: Mesto.
-ссылка на Github Pages  https://annatrofimenkova.github.io/russian-travel/
+ссылка на Github Pages  https://annatrofimenkova.github.io/mesto-project/
 # Описание проекта и его функциональность:
 Страница, которая рассказывает об интеерсных местах, которые посещали известные путешестенники на примере знаменитого Жак-Ив Кусто
 # Технологии:
