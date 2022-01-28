@@ -78,9 +78,6 @@ function addNewPhotoCard(link, title) {
 // функция добавления новой карточки
 function addNew(name, link) {
   const elementCard = elementThere.querySelector('.element').cloneNode(true);
-  //elementCard.addEventListener('click', () => {
-  // addNewPhotoCard(link, name);
-  //});
   elementCard.querySelector('.element__title').textContent = name;
   elementCard.querySelector('.element__photo').src = link;
   elementCard.querySelector('.element__photo').addEventListener('click', () => {
