@@ -1,4 +1,4 @@
-.popup__close-icon{
+.popup-photo-card__close-icon{
   position: absolute;
   width: 32px;
   height: 32px;
@@ -15,11 +15,11 @@
   left: 438px;
   top: -38px;
 }
-.popup__close-icon:hover{
+.popup-photo-card__close-icon:hover{
   opacity: 0.6;
 }
 @media (max-width: 1040px) {
-  .popup__close-icon{
+  .popup-photo-card__close-icon{
     width: 20px;
     height: 20px;
     left: 265px;

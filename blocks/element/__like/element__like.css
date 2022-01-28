@@ -10,7 +10,7 @@
   font: inherit;
   color: inherit;
   background-color: transparent;
-  margin-right: 20px;
+  overflow: visible;
 }
 .element__like:hover{
   opacity: 0.5;
