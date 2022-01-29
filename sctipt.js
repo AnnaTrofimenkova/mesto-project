@@ -1,7 +1,6 @@
 // попап редактирования профиля
 const body = document.querySelector('.body');
 
-
 const profileEditButton = document.querySelector('.profile__edit-button');
 const popupProfile = document.querySelector('.popup');
 const popupCloseIcon = document.querySelector('.popup__close-icon');
@@ -19,6 +18,7 @@ const profileSubtitle = document.querySelector('.profile__subtitle');
 //попап новой карточки
 const newCardButton = document.querySelector('.profile__add-button');
 const popupNewCard = document.querySelector('.popup_new-card');
+const popupFormNewCard = document.querySelector('.popup__form');
 const popupCloseIconNewCard = document.querySelector('.popup__close-icon_new-card');
 const popupButtonNewCard = document.querySelector('#popup__button_new_card');
 const inputNameNewCard = document.querySelector('#name-new-card');
@@ -29,11 +29,9 @@ const inputLink = document.querySelector('#link-new-card');
 const elements = document.querySelector('.elements'); //куда будем добавлять
 const elementThere = document.querySelector('#element-template').content;//их версия
 
-
-
 //фото карточек
-const elementPhotoCardThere = document.querySelector('#element-template-popup-photo-card').content;//их версия
-
+let popBigPhotoCard = document.querySelector('.popup-photo-card');
+const closeBigPhoto = document.querySelector('.popup-photo-card__close-icon');
 
 // массив для шести карточек
 const initialCards = [
@@ -63,16 +61,11 @@ const initialCards = [
   }
 ];
 
+// функция добавления большой картинки
 
-// функция добавления новой большой фото карточки
 function addNewPhotoCard(link, title) {
-  const elementPhotoCard = elementPhotoCardThere.querySelector('.popup-photo-card').cloneNode(true);
-  elementPhotoCard.querySelector('.popup-photo-card__title').textContent = title;
-  elementPhotoCard.querySelector('.popup-photo-card__photo').src = link;
-  elementPhotoCard.querySelector('.popup-photo-card__close-icon').addEventListener('click', (evt) => {
-    evt.target.closest('.popup-photo-card').classList.remove('popup-photo-card_opened');
-  });
-  body.prepend(elementPhotoCard);
+  popBigPhotoCard.classList.add("popup_opened");
+
 };
 
 // функция добавления новой карточки
@@ -99,10 +92,21 @@ initialCards.forEach(function (item) {
 });
 
 // добавление карточки по клику
-popupButtonNewCard.addEventListener('click', function () {
+//popupButtonNewCard.addEventListener('click', function () {
+//addNew(inputNameNewCard.value, inputLink.value);
+//closePopup(popupNewCard)
+//});
+
+// добавление карточки по клику
+function formSubmitHandlerNewCard(evt) {
+  evt.preventDefault();
   addNew(inputNameNewCard.value, inputLink.value);
-  closePopup(popupNewCard)
-});
+  closePopup(popupNewCard);
+}
+popupFormNewCard.addEventListener('submit', formSubmitHandlerNewCard);
+
+
+
 
 
 // функция открытия попапа
@@ -133,6 +137,10 @@ popupCloseIcon.addEventListener('click', () => {
 //закрытие попапа карточки
 popupCloseIconNewCard.addEventListener('click', () => {
   closePopup(popupNewCard)
+});
+//закрытие попапа большого фото
+closeBigPhoto.addEventListener('click', () => {
+  closePopup(popBigPhotoCard)
 });
 
 
