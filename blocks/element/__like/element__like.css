@@ -11,6 +11,7 @@
   color: inherit;
   background-color: transparent;
   overflow: visible;
+  flex-shrink: 0;
 }
 .element__like:hover{
   opacity: 0.5;

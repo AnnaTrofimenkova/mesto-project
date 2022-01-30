@@ -18,7 +18,7 @@ const profileSubtitle = document.querySelector('.profile__subtitle');
 //попап новой карточки
 const newCardButton = document.querySelector('.profile__add-button');
 const popupNewCard = document.querySelector('.popup_new-card');
-const popupFormNewCard = document.querySelector('.popup__form');
+const popupFormNewCard = document.querySelector('.popup__form_new-card');
 const popupCloseIconNewCard = document.querySelector('.popup__close-icon_new-card');
 const popupButtonNewCard = document.querySelector('#popup__button_new_card');
 const inputNameNewCard = document.querySelector('#name-new-card');
@@ -91,11 +91,6 @@ initialCards.forEach(function (item) {
   addNew(item.name, item.link);
 });
 
-// добавление карточки по клику
-//popupButtonNewCard.addEventListener('click', function () {
-//addNew(inputNameNewCard.value, inputLink.value);
-//closePopup(popupNewCard)
-//});
 
 // добавление карточки по клику
 function formSubmitHandlerNewCard(evt) {
