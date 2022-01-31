@@ -32,6 +32,8 @@ const elementThere = document.querySelector('#element-template').content;//их 
 //фото карточек
 const popBigPhotoCard = document.querySelector('.popup-photo-card');
 const closeBigPhoto = document.querySelector('.popup-photo-card__close-icon');
+const titleBigPhotoCard = document.querySelector(".popup-photo-card__title");
+const photoBigPhotoCard = document.querySelector(".popup-photo-card__photo");
 
 // массив для шести карточек
 const initialCards = [
@@ -64,8 +66,9 @@ const initialCards = [
 // функция добавления большой картинки
 
 function addNewPhotoCard(name, link) {
-  document.querySelector(".popup-photo-card__title").textContent = name;
-  document.querySelector(".popup-photo-card__photo").src = link;
+  titleBigPhotoCard.textContent = name;
+  photoBigPhotoCard.src = link;
+  photoBigPhotoCard.alt = name;
   openPopup(popBigPhotoCard);
 
 };
@@ -94,20 +97,6 @@ function createCard(item) {
 // функция добавления новой карточки
 function addNewCard(name, link) {
   const elementCard = createCard({ name, link });
-  //const elementCard = elementThere.querySelector('.element').cloneNode(true);
-  //const cardImage = elementCard.querySelector('.element__photo');
-  //elementCard.querySelector('.element__title').textContent = name;
-  //cardImage.src = link;
-  //cardImage.alt = name;
-  //cardImage.addEventListener('click', () => {
-  //addNewPhotoCard(name, link);
-  //});
-  //elementCard.querySelector('.element__like').addEventListener('click', function (evt) {
-  //evt.target.classList.toggle('element__like_active');
-  //});
-  //elementCard.querySelector('.element__tresh').addEventListener('click', (evt) => {
-  //evt.target.closest('.element').remove();
-  // });
   elements.prepend(elementCard);
 };
 
