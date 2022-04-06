@@ -1,10 +1,11 @@
 // попап редактирования профиля
 const body = document.querySelector('.body');
-
 const profileEditButton = document.querySelector('.profile__edit-button');
 const popupProfile = document.querySelector('.popup');
 const profilePopupCloseIcon = document.querySelector('.popup__close-icon');
 const profileForm = document.querySelector('.popup__form');
+const formInput = profileForm.querySelector('.popup__input');// 5 месяц
+const formError = profileForm.querySelector(`.${formInput.id}-error`); // 5 месяц
 const inputName = document.querySelector('#name');
 const inputProfession = document.querySelector('#profession');
 const popupTitle = document.querySelector('.popup__title');
@@ -35,33 +36,7 @@ const closeBigPhoto = document.querySelector('.popup-photo-card__close-icon');
 const titleBigPhotoCard = document.querySelector(".popup-photo-card__title");
 const photoBigPhotoCard = document.querySelector(".popup-photo-card__photo");
 
-// массив для шести карточек
-const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-];
+
 
 // функция добавления большой картинки
 
@@ -163,3 +138,88 @@ function handleProfileFormSubmit(evt) {
 profileForm.addEventListener('submit', handleProfileFormSubmit);
 
 
+// 5 мес массовая валидация
+
+const showInputError = (formElement, inputElement, errorMessage) => {
+  inputElement.classList.add('popup__input_type_error');
+  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+  errorElement.textContent = errorMessage;
+  errorElement.classList.add('popup__input-error_active');
+};
+
+const hideInputError = (formElement, inputElement) => {
+  inputElement.classList.remove('popup__input_type_error');
+  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+  errorElement.classList.remove('form__input-error_active');
+  errorElement.textContent = '';
+};
+
+const checkInputValidity = (formElement, inputElement) => {
+  if (!inputElement.validity.valid) {
+    showInputError(formElement, inputElement, inputElement.validationMessage);
+  } else {
+    hideInputError(formElement, inputElement);
+  }
+};
+
+
+const toggleButtonState = (inputList, buttonElement) => {
+  if (hasInvalidInput(inputList)) {
+    buttonElement.classList.add('popup__button__submit_inactive');
+  } else {
+    buttonElement.classList.remove('popup__button__submit_inactive');
+  }
+};
+
+const setEventListeners = (formElement) => {
+  const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
+  const buttonElement = formElement.querySelector('.popup__button');
+
+  toggleButtonState(inputList, buttonElement);
+
+
+  inputList.forEach((inputElement) => {
+    inputElement.addEventListener('input', function () {
+      checkInputValidity(formElement, inputElement);
+      toggleButtonState(inputList, buttonElement);
+    });
+
+  });
+};
+
+function enableValidation() {
+  const formList = Array.from(document.querySelectorAll('.popup__form'));
+  formList.forEach((formElement) => {
+    formElement.addEventListener('submit', (evt) => {
+      evt.preventDefault();
+    });
+
+    setEventListeners(formElement);
+  });
+}
+enableValidation();
+
+function hasInvalidInput(inputList) {
+  return inputList.some((inputElement) => {
+    return !inputElement.validity.valid;
+  });
+};
+
+// клик по overlay
+
+document.addEventListener('click', function (evt) {
+  if (evt.target.classList.contains("popup__form") || evt.target.classList.contains("popup__title")
+    || evt.target.classList.contains("popup__input") || evt.target.classList.contains("popup__input")
+    || evt.target.classList.contains("popup__input-error") || evt.target.classList.contains("popup__button")) {
+  } else
+    closePopup(evt.target);
+})
+
+//клик по esc
+
+document.addEventListener('keydown', function (evt) {
+  if (evt.key == 'Escape') {
+    popupProfile.classList.remove("popup_opened");
+    popupNewCard.classList.remove("popup_opened");
+  }
+});
