@@ -5,6 +5,7 @@ import { enableValidation, validationConfig } from './components/validate.js'
 //import { getCard, getName, editName } from './components/api.js'
 
 
+
 // константы редактированиz значения в попапе
 export const profileTitle = document.querySelector('.profile__title');
 export const profileSubtitle = document.querySelector('.profile__subtitle');

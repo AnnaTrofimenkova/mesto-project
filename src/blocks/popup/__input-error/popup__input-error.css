@@ -7,8 +7,5 @@
   line-height: 15px;
   color: #FF0000;
   margin-bottom: 13px;
-  opacity: 0;
-}
-.popup__input-error_active{
   opacity: 1;
 }

@@ -1,83 +1,4 @@
-//5 мес массовая валидация
-
-// const showInputError = (formElement, inputElement, errorMessage) => {
-//   inputElement.classList.add('popup__input_type_error');
-//   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-//   errorElement.textContent = errorMessage;
-//   errorElement.classList.add('popup__input-error_active');
-// };
-
-// const hideInputError = (formElement, inputElement) => {
-//   inputElement.classList.remove('popup__input_type_error');
-//   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-//   errorElement.classList.remove('form__input-error_active');
-//   errorElement.textContent = '';
-// };
-
-// const checkInputValidity = (formElement, inputElement) => {
-//   if (!inputElement.validity.valid) {
-//     showInputError(formElement, inputElement, inputElement.validationMessage);
-//   } else {
-//     hideInputError(formElement, inputElement);
-//   }
-// };
-
-
-// const toggleButtonState = (inputList, buttonElement) => {
-//   if (hasInvalidInput(inputList)) {
-//     buttonElement.classList.add('popup__button__submit_inactive');
-//     buttonElement.disabled = true;
-//   } else {
-//     buttonElement.classList.remove('popup__button__submit_inactive');
-//     buttonElement.disabled = false;
-//   }
-// };
-
-// const setEventListeners = (formElement) => {
-//   const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
-//   const buttonElement = formElement.querySelector('.popup__button');
-
-//   toggleButtonState(inputList, buttonElement);
-
-
-//   inputList.forEach((inputElement) => {
-//     inputElement.addEventListener('input', function () {
-//       checkInputValidity(formElement, inputElement);
-//       toggleButtonState(inputList, buttonElement);
-//     });
-
-//   });
-// };
-
-// export function enableValidation() {
-//   const formList = Array.from(document.querySelectorAll('.popup__form'));
-//   formList.forEach((formElement) => {
-//     formElement.addEventListener('submit', (evt) => {
-//       evt.preventDefault();
-//     });
-
-//     setEventListeners(formElement);
-//   });
-// }
-
-
-// function hasInvalidInput(inputList) {
-//   return inputList.some((inputElement) => {
-//     return !inputElement.validity.valid;
-//   });
-// };
-
-// export const validationConfig = {
-//   formSelector: '.popup__form',// попала
-//   inputSelector: '.popup__input',// попала
-//   submitButtonSelector: '.popup__button',// попала
-//   inactiveButtonClass: 'ppopup__button__submit_inactive',// попала
-//   inputErrorClass: 'popup__input_type',
-// }
-
-
 // //5 мес массовая валидация вэбинар
-
 
 const showError = (errorElement, inputElement, inputErrorClass) => {
   errorElement.textContent = inputElement.validationMessage;
@@ -91,7 +12,7 @@ const hideError = (errorElement, inputElement, inputErrorClass) => {
 
 const checkInputValidity = (formElement, inputElement, config) => {
   const isInputNotValid = !inputElement.validity.valid;
-  const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
+  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
 
   if (isInputNotValid) {
     showError(errorElement, inputElement, config);
@@ -145,7 +66,7 @@ export const validationConfig = {
   inputSelector: '.popup__input',//ok
   submitButtonSelector: '.popup__button',//ok
   inactiveButtonClass: 'popup__button__submit_inactive',//ok
-  inputErrorClass: 'popup__input-error_active',
+  inputErrorClass: 'popup__input_type_error',
 }
 
 
