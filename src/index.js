@@ -1,7 +1,7 @@
 import './pages/index.css';
 import { openPopup, closePopup } from './components/modal.js'
 import { addNewCard, handleNewCardFormSubmit, handleProfileFormSubmit } from './components/card.js'
-import { enableValidation } from './components/validate.js'
+import { enableValidation, validationConfig } from './components/validate.js'
 //import { getCard, getName, editName } from './components/api.js'
 
 
@@ -9,22 +9,6 @@ import { enableValidation } from './components/validate.js'
 export const profileTitle = document.querySelector('.profile__title');
 export const profileSubtitle = document.querySelector('.profile__subtitle');
 const profileAvatar = document.querySelector('.profile__avatar');
-
-//getCard()
-// .then((data) => {
-//data.forEach(function (item) {
-// addNewCard(item.name, item.link);
-//});
-//})
-
-//getName()
-//.then((data) => {
-// console.log(data);
-//profileTitle.textContent = data.name;
-//profileSubtitle.textContent = data.about;
-//profileAvatar.src = data.avatar;
-//})
-
 
 
 // попап редактирования профиля
@@ -41,7 +25,7 @@ const popupTitle = document.querySelector('.popup__title');
 //попап новой карточки
 const newCardButton = document.querySelector('.profile__add-button');
 export const popupNewCard = document.querySelector('.popup_new-card');
-const popupFormNewCard = document.querySelector('.popup__form_new-card');
+export const popupFormNewCard = document.querySelector('.popup__form_new-card');
 const popupCloseIconNewCard = document.querySelector('.popup__close-icon_new-card');
 const popupButtonNewCard = document.querySelector('#popup__button_new_card');
 
@@ -49,32 +33,6 @@ const popupButtonNewCard = document.querySelector('#popup__button_new_card');
 export const popBigPhotoCard = document.querySelector('.popup-photo-card');
 const closeBigPhoto = document.querySelector('.popup-photo-card__close-icon');
 
-const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-];
 
 popupFormNewCard.addEventListener('submit', handleNewCardFormSubmit);
 
@@ -112,7 +70,7 @@ profileForm.addEventListener('submit', handleProfileFormSubmit);
 // 5 мес массовая валидация
 
 
-enableValidation();
+enableValidation(validationConfig);
 
 
 // клик по overlay
@@ -127,9 +85,13 @@ document.addEventListener('click', function (evt) {
 
 //клик по esc
 
-document.addEventListener('keydown', function (evt) {
-  if (evt.key == 'Escape') {
-    popupProfile.classList.remove("popup_opened");
-    popupNewCard.classList.remove("popup_opened");
+export function doEsc(evt) {
+  if (evt.key == 'Escape' && document.querySelector(".popup_opened")) {
+    closePopup(document.querySelector(".popup_opened"));
   }
-});
+  else {
+    document.removeEventListener('keydown', doEsc);
+  }
+};
+
+

@@ -1,6 +1,6 @@
 
 import { openPopup, closePopup } from './modal.js'
-import { popBigPhotoCard, popupProfile, popupNewCard, profileTitle, profileSubtitle } from '../index.js'
+import { popBigPhotoCard, popupProfile, popupNewCard, profileTitle, profileSubtitle, popupFormNewCard } from '../index.js'
 
 // константы добавления большой картинки
 const titleBigPhotoCard = document.querySelector(".popup-photo-card__title");
@@ -17,7 +17,7 @@ const inputNameNewCard = document.querySelector('#name-new-card');
 const inputLink = document.querySelector('#link-new-card');
 
 
-// массив для шести карточек
+// массив для шести карточекnp
 const initialCards = [
   {
     name: 'Архыз',
@@ -60,6 +60,7 @@ function addNewPhotoCard(name, link) {
   photoBigPhotoCard.alt = name;
   openPopup(popBigPhotoCard);
 };
+
 
 
 //функция СОЗДАНИЯ новой карточки
