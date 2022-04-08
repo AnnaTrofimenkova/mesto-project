@@ -21,7 +21,7 @@ const checkInputValidity = (formElement, inputElement, config) => {
   }
 }
 
-const toggleButtonState = (button, isActive, inactiveButtonClass) => {
+export const toggleButtonState = (button, isActive, inactiveButtonClass) => {
   if (isActive) {
     button.classList.remove(inactiveButtonClass);
     button.disabled = false;

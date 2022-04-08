@@ -11,6 +11,9 @@ const elementThere = document.querySelector('#element-template').content;//их 
 
 // константы добавления новой карточки
 const elements = document.querySelector('.elements');
+const buttonSubmit = document.querySelector('.popup__button');
+
+
 
 // константы добавления карточки по клику
 const inputNameNewCard = document.querySelector('#name-new-card');
@@ -95,7 +98,7 @@ export function handleNewCardFormSubmit(evt) {
   evt.preventDefault();
   addNewCard(inputNameNewCard.value, inputLink.value);
   closePopup(popupNewCard);
-  popupFormNewCard.reset()
+  popupFormNewCard.reset();
 }
 
 //редактирование значения в попапе
