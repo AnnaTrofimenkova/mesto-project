@@ -1,4 +1,4 @@
-
+import { toggleButtonState, validationConfig } from './validate'
 import { openPopup, closePopup } from './modal.js'
 import { popBigPhotoCard, popupProfile, popupNewCard, profileTitle, profileSubtitle, popupFormNewCard } from '../index.js'
 
@@ -12,7 +12,7 @@ const elementThere = document.querySelector('#element-template').content;//их 
 // константы добавления новой карточки
 const elements = document.querySelector('.elements');
 const buttonSubmit = document.querySelector('.popup__button');
-
+const buttonSubmitId = document.querySelector('#popup__button_new_card');
 
 
 // константы добавления карточки по клику
@@ -99,8 +99,10 @@ export function handleNewCardFormSubmit(evt) {
   addNewCard(inputNameNewCard.value, inputLink.value);
   closePopup(popupNewCard);
   popupFormNewCard.reset();
+  toggleButtonState(buttonSubmitId, false, validationConfig.inactiveButtonClass);
 }
 
+console.log(buttonSubmit);
 //редактирование значения в попапе
 export function handleProfileFormSubmit(evt) {
   evt.preventDefault();
