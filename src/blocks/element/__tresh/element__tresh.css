@@ -12,3 +12,6 @@
   background-color: transparent;
   background-image: url(../../../images/Trash.svg);
 }
+.element__tresh-nonActive{
+  display: none;
+}

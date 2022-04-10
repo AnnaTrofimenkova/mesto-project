@@ -71,7 +71,7 @@ export const validationConfig = {
 
 
 const { inputSelector, ...rest } = validationConfig;
-console.log(rest);
+//console.log(rest);
 
 
 //enableValidation(validationConfig);

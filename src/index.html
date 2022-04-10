@@ -17,7 +17,8 @@
     <main>
       <section class="profile page__section">
         <div class="profile__cont">
-          <img class="profile__avatar" src="<%=require('./images/__kusto.jpg')%>" alt="Аватар">
+          <div class="profile__avatar-cont"><img class="profile__avatar" src="<%=require('./images/__kusto.jpg')%>"
+              alt="Аватар"></div>
           <div class="profile__info">
             <h1 class="profile__title">Жак-Ив Кусто</h1>
             <button type="button" class="profile__edit-button"></button>
@@ -64,6 +65,20 @@
       </form>
     </div>
   </div>
+  <div class="popup popup_new-avatar">
+    <div class="popup__container">
+      <button type="button" class="popup__close-icon popup__close-icon_avatar"></button>
+      <form class="popup__form popup__form_avatar" name="form" novalidate>
+        <h2 class="popup__title">Обновить аватар </h2>
+        <input id="link-new-avatar" class="popup__input" placeholder="Ссылка на картинку" type="url" name="profession"
+          required minlength="2">
+        <span class="link-new-avatar-error popup__input-error"></span>
+        <button type="submit" class="popup__button popup__button__submit_inactive" id="popup__button_new_avatar"
+          disabled>Сохранить</button>
+      </form>
+    </div>
+  </div>
+
   <div class="popup popup-photo-card">
     <div class="popup-photo-card__container">
       <button type="button" class="popup__close-icon popup-photo-card__close-icon"></button>
@@ -77,7 +92,10 @@
       <button type="button" class="element__tresh" alt="Удалить"></button>
       <div class="element__cont">
         <h2 class="element__title"></h2>
-        <button type="button" class="element__like"></button>
+        <div class="element__cont-for-likes">
+          <button type="button" class="element__like"></button>
+          <div class="element__count-likes">1</div>
+        </div>
       </div>
     </div>
   </template>
