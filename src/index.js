@@ -24,7 +24,8 @@ Promise.all([getName(), getCard()])
     userID.id = userData._id;
     // тут установка данных пользователя
     cards.forEach(function (item) {
-      addNewCard(item.name, item.link, item.likes.length, item._id, item.owner._id);
+      addNewCard(item);
+      //addNewCard(item.name, item.link, item.likes.length, item._id, item.owner._id);
     })
     // и тут отрисовка карточек
   })

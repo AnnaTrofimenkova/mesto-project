@@ -43,7 +43,11 @@ export function addCard(newCardSer) {
   return fetch(`${config.baseUrl}/cards`, {
     method: 'POST',
     headers: config.headers,
-    body: JSON.stringify(newCardSer)
+    //body: JSON.stringify(newCardSer)
+    body: JSON.stringify({
+      name: newCardSer.name,
+      link: newCardSer.link
+    })
   })
     .then(onResponce)
 }
