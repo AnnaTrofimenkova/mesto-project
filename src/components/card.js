@@ -1,6 +1,6 @@
 import { toggleButtonState, validationConfig } from './validate'
 import { openPopup, closePopup } from './modal.js'
-import { popBigPhotoCard, popupProfile, popupNewCard, profileTitle, profileSubtitle, popupFormNewCard, popupAvatar, profileAvatar } from '../index.js'
+import { popBigPhotoCard, popupProfile, popupNewCard, profileTitle, profileSubtitle, popupFormNewCard, popupAvatar, profileAvatar, userID } from '../index.js'
 import { editName, addCard, deleteCard, getCard, editLike, delLike, editAva } from './api.js'
 
 
@@ -110,58 +110,42 @@ function createCard(item) {
         };
 
         evt.target.classList.toggle('element__like_active');
-        editLike(findId)
-          .then((data) => {
-            elementCard.querySelector('.element__count-likes').textContent = data.likes.length//выводит новое значения лайка
-          })
-          .catch((err) => {
-            console.log(err);
-          })
       })
       .catch((err) => {
         console.log(err);
       })
   });
+  if (item.ownerId !== userID.id) {
+    elementCard.querySelector('.element__tresh').classList.add("element__tresh-nonActive");// удалить значек мусорник
+  }
 
-  getCard(item)
-    .then(() => {
-      if (item.ownerId == myID) { }
-      else {
-        elementCard.querySelector('.element__tresh').classList.add("element__tresh-nonActive");// удалить значек мусорник
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });;
-
-
-  // функция муроски в создании новой карточки
+  // функция удаления по мусорнику в создании новой карточки
   elementCard.querySelector('.element__tresh').addEventListener('click', (evt) => {
-    getCard(item)
-      .then(() => {
-        let findId = item.id;
-        deleteCard(findId)
-          .then(() => {
-            evt.target.closest('.element').remove();
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    delCard(evt, item);
   });
-
 
   return elementCard;
 }
+
+//функция удаления карточки
+
+function delCard(evt, item) {
+  deleteCard(item.id)
+    .then(() => {
+      evt.target.closest('.element').remove();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
 
 // функция добавления новой карточки
 export function addNewCard(name, link, likes, id, ownerId) {
   const elementCard = createCard({ name, link, likes, id, ownerId });
   elements.prepend(elementCard);
 };
+
 
 //добавление карточки по клику
 export function handleNewCardFormSubmit(evt) {
@@ -171,7 +155,7 @@ export function handleNewCardFormSubmit(evt) {
     name: inputNameNewCard.value,
     link: inputLink.value
   }
-
+  //console.log(item)
   addCard(objForCard)
     .then(() => {
       addNewCard(inputNameNewCard.value, inputLink.value);
@@ -179,13 +163,14 @@ export function handleNewCardFormSubmit(evt) {
       popupFormNewCard.reset();
       buttonSubmitId.textContent = "Сохранить";
       toggleButtonState(buttonSubmitId, false, validationConfig.inactiveButtonClass);
+      //document.querySelector('.element__tresh').classList.remove("element__tresh-nonActive");//точно?
+
     })
     .catch((err) => {
       console.log(err);
-    });;
+    });
+};
 
-
-}
 
 
 //редактирование значения в попапе

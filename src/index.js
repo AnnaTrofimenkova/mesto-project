@@ -11,26 +11,26 @@ export const profileTitle = document.querySelector('.profile__title');
 export const profileSubtitle = document.querySelector('.profile__subtitle');
 export const profileAvatar = document.querySelector('.profile__avatar');
 
-getName()
-  .then((data) => {
-    profileTitle.textContent = data.name;
-    profileSubtitle.textContent = data.about;
-    profileAvatar.src = data.avatar;
-  })
-  .catch((err) => {
-    console.log(err);
-  });;
+export const userID = { id: "" }
 
-getCard()
-  .then((data) => {
-    data.forEach(function (item) {
+
+
+Promise.all([getName(), getCard()])
+  .then(([userData, cards]) => {
+    profileTitle.textContent = userData.name;
+    profileSubtitle.textContent = userData.about;
+    profileAvatar.src = userData.avatar;
+
+    userID.id = userData._id;
+    // тут установка данных пользователя
+    cards.forEach(function (item) {
       addNewCard(item.name, item.link, item.likes.length, item._id, item.owner._id);
     })
+    // и тут отрисовка карточек
   })
-  .catch((err) => {
+  .catch(err => {
     console.log(err);
-  });;
-
+  });
 
 
 

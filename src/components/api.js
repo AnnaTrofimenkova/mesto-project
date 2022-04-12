@@ -1,20 +1,12 @@
 // подключение к карточккам сервера
-const configCard = {
-  baseUrl: 'https://nomoreparties.co/v1/plus-cohort-8/cards',
+const config = {
+  baseUrl: 'https://nomoreparties.co/v1/plus-cohort-8',
   headers: {
     authorization: '837c0be1-5609-4c04-b384-491cd26df7eb',
     'Content-Type': 'application/json'
   }
 }
 
-// подключение к профилю сервера
-const configName = {
-  baseUrl: 'https://nomoreparties.co/v1/plus-cohort-8/users/me',
-  headers: {
-    authorization: '837c0be1-5609-4c04-b384-491cd26df7eb',
-    'Content-Type': 'application/json'
-  }
-}
 
 const onResponce = (res) => {
   return res.ok ? res.json() : Promise.reject(res)
@@ -22,25 +14,25 @@ const onResponce = (res) => {
 
 // получаем карточки с сервера
 export function getCard() {
-  return fetch(configCard.baseUrl, {
-    headers: configCard.headers
+  return fetch(`${config.baseUrl}/cards`, {
+    headers: config.headers
   })
     .then(onResponce)
 }
 
 // получаем профиль с сервера
 export function getName() {
-  return fetch(configName.baseUrl, {
-    headers: configName.headers
+  return fetch(`${config.baseUrl}/users/me`, {
+    headers: config.headers
   })
     .then(onResponce)
 }
 
 // меняем имя профиля на  сервере
 export function editName(newName) {
-  return fetch(configName.baseUrl, {
+  return fetch(`${config.baseUrl}/users/me`, {
     method: 'PATCH',
-    headers: configName.headers,
+    headers: config.headers,
     body: JSON.stringify(newName)
   })
     .then(onResponce)
@@ -48,18 +40,18 @@ export function editName(newName) {
 
 // добавляем на сервер карточку
 export function addCard(newCardSer) {
-  return fetch(configCard.baseUrl, {
+  return fetch(`${config.baseUrl}/cards`, {
     method: 'POST',
-    headers: configCard.headers,
+    headers: config.headers,
     body: JSON.stringify(newCardSer)
   })
     .then(onResponce)
 }
 // улаляем карточку с сервера
 export function deleteCard(id) {
-  return fetch(`${configCard.baseUrl}/${id}`, {
+  return fetch(`${config.baseUrl}/cards/${id}`, {
     method: 'DELETE',
-    headers: configCard.headers
+    headers: config.headers
   })
     .then(onResponce);
 }
@@ -68,9 +60,9 @@ export function deleteCard(id) {
 
 // записываем лайк на сервер
 export function editLike(id) {
-  return fetch(`${configCard.baseUrl}/likes/${id}`, {
+  return fetch(`${config.baseUrl}/cards/likes/${id}`, {
     method: 'PUT',
-    headers: configCard.headers,
+    headers: config.headers,
   })
     .then(onResponce)
 }
@@ -79,9 +71,9 @@ export function editLike(id) {
 
 // удаляем лайк с сервера
 export function delLike(id) {
-  return fetch(`${configCard.baseUrl}/likes/${id}`, {
+  return fetch(`${config.baseUrl}/cards/likes/${id}`, {
     method: 'DELETE',
-    headers: configCard.headers,
+    headers: config.headers,
   })
     .then(onResponce)
 }
@@ -89,9 +81,9 @@ export function delLike(id) {
 
 // меняем аватарку
 export function editAva(newURI) {
-  return fetch(`${configName.baseUrl}/avatar`, {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: 'PATCH',
-    headers: configName.headers,
+    headers: config.headers,
     body: JSON.stringify(newURI)
   })
     .then(onResponce)
@@ -112,7 +104,7 @@ export function editAva(newURI) {
 
 // смотрю на айдишки
 
-// getCard()
+// editLikeTest()
 //   .then((data) => {
 //     data.forEach(function (item) {
 //       console.log(item._id, item.name, item.likes.length);
