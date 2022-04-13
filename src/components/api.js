@@ -8,7 +8,7 @@ const config = {
 }
 
 
-const onResponce = (res) => {
+const checkResponse = (res) => {
   return res.ok ? res.json() : Promise.reject(res)
 }
 
@@ -17,7 +17,7 @@ export function getCard() {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers
   })
-    .then(onResponce)
+    .then(checkResponse)
 }
 
 // получаем профиль с сервера
@@ -25,7 +25,7 @@ export function getName() {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers
   })
-    .then(onResponce)
+    .then(checkResponse)
 }
 
 // меняем имя профиля на  сервере
@@ -35,7 +35,7 @@ export function editName(newName) {
     headers: config.headers,
     body: JSON.stringify(newName)
   })
-    .then(onResponce)
+    .then(checkResponse)
 }
 
 // добавляем на сервер карточку
@@ -49,7 +49,7 @@ export function addCard(newCardSer) {
       link: newCardSer.link
     })
   })
-    .then(onResponce)
+    .then(checkResponse)
 }
 // улаляем карточку с сервера
 export function deleteCard(id) {
@@ -57,7 +57,7 @@ export function deleteCard(id) {
     method: 'DELETE',
     headers: config.headers
   })
-    .then(onResponce);
+    .then(checkResponse);
 }
 
 
@@ -68,7 +68,7 @@ export function editLike(id) {
     method: 'PUT',
     headers: config.headers,
   })
-    .then(onResponce)
+    .then(checkResponse)
 }
 
 
@@ -79,7 +79,7 @@ export function delLike(id) {
     method: 'DELETE',
     headers: config.headers,
   })
-    .then(onResponce)
+    .then(checkResponse)
 }
 
 
@@ -90,7 +90,7 @@ export function editAva(newURI) {
     headers: config.headers,
     body: JSON.stringify(newURI)
   })
-    .then(onResponce)
+    .then(checkResponse)
 }
 
 // const testURL = {

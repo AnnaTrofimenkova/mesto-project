@@ -1,6 +1,6 @@
 import './pages/index.css';
 import { openPopup, closePopup } from './components/modal.js'
-import { addNewCard, handleNewCardFormSubmit, handleProfileFormSubmit, handleAvaFormSubmit } from './components/card.js'
+import { addNewCard, handleNewCardFormSubmit, handleProfileFormSubmit, handleAvaFormSubmit, inputName, inputProfession } from './components/card.js'
 import { enableValidation, validationConfig } from './components/validate.js'
 import { getCard, getName, editName } from './components/api.js'
 
@@ -20,14 +20,14 @@ Promise.all([getName(), getCard()])
     profileTitle.textContent = userData.name;
     profileSubtitle.textContent = userData.about;
     profileAvatar.src = userData.avatar;
+    inputName.value = userData.name;
+    inputProfession.value = userData.about;
 
     userID.id = userData._id;
-    // тут установка данных пользователя
     cards.forEach(function (item) {
       addNewCard(item);
-      //addNewCard(item.name, item.link, item.likes.length, item._id, item.owner._id);
     })
-    // и тут отрисовка карточек
+
   })
   .catch(err => {
     console.log(err);

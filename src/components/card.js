@@ -11,6 +11,7 @@ const titleBigPhotoCard = document.querySelector(".popup-photo-card__title");
 const photoBigPhotoCard = document.querySelector(".popup-photo-card__photo");
 //константы СОЗДАНИЯ новой карточки
 const elementThere = document.querySelector('#element-template').content;//их версия
+
 // константы добавления новой карточки
 const elements = document.querySelector('.elements');
 const buttonSubmit = document.querySelector('.popup__button');
@@ -18,9 +19,8 @@ const buttonSubmitId = document.querySelector('#popup__button_new_card');
 // константы добавления карточки по клику
 const inputNameNewCard = document.querySelector('#name-new-card');
 const inputLink = document.querySelector('#link-new-card');
-const myID = "386333379b5bc17b5d067749"
-const inputName = document.querySelector('#name');
-const inputProfession = document.querySelector('#profession');
+export const inputName = document.querySelector('#name');
+export const inputProfession = document.querySelector('#profession');
 // функция добавления большой картинки
 function addNewPhotoCard(name, link) {
   titleBigPhotoCard.textContent = name;
@@ -32,42 +32,17 @@ function addNewPhotoCard(name, link) {
 function createCard(item) {
   const elementCard = elementThere.querySelector('.element').cloneNode(true);
   const cardImage = elementCard.querySelector('.element__photo');
+  const countLikes = elementCard.querySelector('.element__count-likes');
+  const buttonLikes = elementCard.querySelector('.element__like');
   elementCard.querySelector('.element__title').textContent = item.name;
-  elementCard.querySelector('.element__count-likes').textContent = item.likes;// 5 месяц лайки
+  countLikes.textContent = item.likes.length;// 5 месяц лайки
   cardImage.src = item.link;
   cardImage.alt = item.name;
   cardImage.addEventListener('click', () => {
     addNewPhotoCard(item.name, item.link);
   });
-  elementCard.querySelector('.element__like').addEventListener('click', function (evt) {
-    getCard(item)
-      .then(() => {
-        let findId = item._id;
-        if (evt.target.classList.contains('element__like_active')) {
-          console.log("хочу удалить лайк")
-          delLike(findId)
-            .then((data) => {
-              elementCard.querySelector('.element__count-likes').textContent = data.likes.length//выводит новое значения лайка
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
-        else {
-          console.log("хочу поставить лайк")
-          editLike(findId)
-            .then((data) => {
-              elementCard.querySelector('.element__count-likes').textContent = data.likes.length//выводит новое значения лайка
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        };
-        evt.target.classList.toggle('element__like_active');
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+  buttonLikes.addEventListener('click', function (evt) {
+    toggleLike(evt, item, countLikes);
   });
   if (item.owner._id === userID.id) {
     elementCard.querySelector('.element__tresh').addEventListener('click', (evt) => {
@@ -75,13 +50,53 @@ function createCard(item) {
         .then(() => {
           removeCard(evt)
         })
+        .catch((err) => {
+          console.log(err);
+        });
     });
   } else {
     elementCard.querySelector('.element__tresh').classList.add("element__tresh-nonActive");// удалить значек мусорник
   }
+  if (item.likes.find((like) => like._id === userID.id) ? true : false) {
+    buttonLikes.classList.add('element__like_active');
+  };
+
   // функция удаления по мусорнику в создании новой карточки
   return elementCard;
 }
+
+// функция добавления и убирания лайка
+
+function toggleLike(evt, item, countLikes) {
+  if (item.likes.find((like) => like._id === userID.id) ? true : false) {
+    console.log("хочу удалить лайк")
+    delLike(item._id)
+      .then((data) => {
+        countLikes.textContent = data.likes.length//выводит новое значения лайка
+        item.likes = data.likes;
+        evt.target.classList.remove('element__like_active');
+
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  else {
+    console.log("хочу поставить лайк")
+    editLike(item._id)
+      .then((data) => {
+        countLikes.textContent = data.likes.length//выводит новое значения лайка
+        item.likes = data.likes;
+        evt.target.classList.add('element__like_active');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+
+
 //функция удаления карточки
 function removeCard(evt) {
   const target = evt.target;
@@ -96,20 +111,19 @@ export function addNewCard(item) {
 export function handleNewCardFormSubmit(evt) {
   evt.preventDefault();
   buttonSubmitId.textContent = "Сохранение...";
-  let objForCard = {
+  const objForCard = {
     name: inputNameNewCard.value,
     link: inputLink.value
   }
-  //console.log(item)
+
   addCard(objForCard)
     .then((data) => {
       addNewCard(data); //Добавление в DOM
       closePopup(popupNewCard);
       popupFormNewCard.reset();
-      buttonSubmitId.textContent = "Сохранить";
       toggleButtonState(buttonSubmitId, false, validationConfig.inactiveButtonClass);
-      //document.querySelector('.element__tresh').classList.remove("element__tresh-nonActive");//точно?
     })
+    .finally(() => buttonSubmitId.textContent = "Сохранить")
     .catch((err) => {
       console.log(err);
     });
@@ -118,16 +132,17 @@ export function handleNewCardFormSubmit(evt) {
 export function handleProfileFormSubmit(evt) {
   evt.preventDefault();
   buttonSubmit.textContent = "Сохранение...";
-  profileTitle.textContent = inputName.value;
-  profileSubtitle.textContent = inputProfession.value;
-  let objForPrifile = {
+  const objForPrifile = {
     name: profileTitle.textContent,
     about: profileSubtitle.textContent
   }
   editName(objForPrifile)
     .then(() => {
       closePopup(popupProfile)
+      profileTitle.textContent = inputName.value;
+      profileSubtitle.textContent = inputProfession.value;
       buttonSubmit.textContent = "Сохранить";
+      //inputName.value = inputName.value;
     })
     .catch((err) => {
       console.log(err);
@@ -137,7 +152,7 @@ export function handleProfileFormSubmit(evt) {
 export function handleAvaFormSubmit(evt) {
   evt.preventDefault();
   buttonSubmitAva.textContent = "Сохранение...";
-  let objForAva = {
+  const objForAva = {
     avatar: inputAvatar.value,
   }
   editAva(objForAva)
@@ -150,7 +165,7 @@ export function handleAvaFormSubmit(evt) {
       console.log(err);
     });;
 };
-//console.log(buttonSubmit);
+
 
 
 
