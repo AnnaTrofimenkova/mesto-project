@@ -142,7 +142,7 @@ export function handleProfileFormSubmit(evt) {
       profileTitle.textContent = inputName.value;
       profileSubtitle.textContent = inputProfession.value;
     })
-    .finally(() => buttonSubmitId.textContent = "Сохранить")
+    .finally(() => buttonSubmit.textContent = "Сохранить")
     .catch((err) => {
       console.log(err);
     });;
@@ -159,7 +159,7 @@ export function handleAvaFormSubmit(evt) {
       closePopup(popupAvatar)
       profileAvatar.src = data.avatar;
     })
-    .finally(() => buttonSubmitId.textContent = "Сохранить")
+    .finally(() => buttonSubmitAva.textContent = "Сохранить")
     .catch((err) => {
       console.log(err);
     });;
