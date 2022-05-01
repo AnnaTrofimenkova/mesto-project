@@ -1,7 +1,7 @@
 
-import { toggleButtonState, validationConfig } from './validate'
+import { toggleButtonState, validationConfig, FormValidator } from './validate'
 import { openPopup, closePopup } from './modal.js'
-import { popBigPhotoCard, popupProfile, popupNewCard, profileTitle, profileSubtitle, popupFormNewCard, popupAvatar, profileAvatar, userID } from '../index.js'
+import { popBigPhotoCard, popupProfile, popupNewCard, profileTitle, profileSubtitle, popupFormNewCard, popupAvatar, profileAvatar, userID} from '../index.js'
 import { editName, addCard, deleteCard, getCard, editLike, delLike, editAva, api } from './api.js'
 
 
@@ -15,7 +15,7 @@ const photoBigPhotoCard = document.querySelector(".popup-photo-card__photo");
 const elementThere = document.querySelector('#element-template').content;//их версия
 
 // константы добавления новой карточки
-const elements = document.querySelector('.elements');
+export const elements = document.querySelector('.elements');
 const buttonSubmit = document.querySelector('.popup__button');
 const buttonSubmitId = document.querySelector('#popup__button_new_card');
 // константы добавления карточки по клику
@@ -23,79 +23,45 @@ const inputNameNewCard = document.querySelector('#name-new-card');
 const inputLink = document.querySelector('#link-new-card');
 export const inputName = document.querySelector('#name');
 export const inputProfession = document.querySelector('#profession');
-// функция добавления большой картинки
-function addNewPhotoCard(name, link) {
-  titleBigPhotoCard.textContent = name;
-  photoBigPhotoCard.src = link;
-  photoBigPhotoCard.alt = name;
-  openPopup(popBigPhotoCard);
-};
-//функция СОЗДАНИЯ новой карточки
-function createCard(item) {
-  const elementCard = elementThere.querySelector('.element').cloneNode(true);
-  const cardImage = elementCard.querySelector('.element__photo');
-  const countLikes = elementCard.querySelector('.element__count-likes');
-  const buttonLikes = elementCard.querySelector('.element__like');
-  elementCard.querySelector('.element__title').textContent = item.name;
-  countLikes.textContent = item.likes.length;// 5 месяц лайки
-  cardImage.src = item.link;
-  cardImage.alt = item.name;
-  cardImage.addEventListener('click', () => {
-    addNewPhotoCard(item.name, item.link);
-  });
-  buttonLikes.addEventListener('click', function (evt) {
-    toggleLike(evt, item, countLikes);
-  });
-  if (item.owner._id === userID.id) {
-    elementCard.querySelector('.element__tresh').addEventListener('click', (evt) => {
-      api.deleteCard(item._id)
-        .then(() => {
-          removeCard(evt)
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    });
-  } else {
-    elementCard.querySelector('.element__tresh').classList.add("element__tresh-nonActive");// удалить значек мусорник
-  }
-  if (item.likes.find((like) => like._id === userID.id) ? true : false) {
-    buttonLikes.classList.add('element__like_active');
-  };
 
-  // функция удаления по мусорнику в создании новой карточки
-  return elementCard;
-}
+//функция СОЗДАНИЯ новой карточки
+// function createCard(item) {
+//   const elementCard = elementThere.querySelector('.element').cloneNode(true);
+//   const cardImage = elementCard.querySelector('.element__photo');
+//   const countLikes = elementCard.querySelector('.element__count-likes');
+//   const buttonLikes = elementCard.querySelector('.element__like');
+//   elementCard.querySelector('.element__title').textContent = item.name;
+//   countLikes.textContent = item.likes.length;// 5 месяц лайки
+//   cardImage.src = item.link;
+//   cardImage.alt = item.name;
+//   cardImage.addEventListener('click', () => {
+//     addNewPhotoCard(item.name, item.link);
+//   });
+//   buttonLikes.addEventListener('click', function (evt) {
+//     toggleLike(evt, item, countLikes);
+//   });
+//   if (item.owner._id === userID.id) {
+//     elementCard.querySelector('.element__tresh').addEventListener('click', (evt) => {
+//       api.deleteCard(item._id)
+//         .then(() => {
+//           removeCard(evt)
+//         })
+//         .catch((err) => {
+//           console.log(err);
+//         });
+//     });
+//   } else {
+//     elementCard.querySelector('.element__tresh').classList.add("element__tresh-nonActive");// удалить значек мусорник
+//   }
+//   if (item.likes.find((like) => like._id === userID.id) ? true : false) {
+//     buttonLikes.classList.add('element__like_active');
+//   };
+
+//   // функция удаления по мусорнику в создании новой карточки
+//   return elementCard;
+// }
 
 // функция добавления и убирания лайка
-
-function toggleLike(evt, item, countLikes) {
-  if (item.likes.find((like) => like._id === userID.id) ? true : false) {
-    console.log("хочу удалить лайк")
-    api.delLike(item._id)
-      .then((data) => {
-        countLikes.textContent = data.likes.length//выводит новое значения лайка
-        item.likes = data.likes;
-        evt.target.classList.remove('element__like_active');
-
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-  else {
-    console.log("хочу поставить лайк")
-    api.editLike(item._id)
-      .then((data) => {
-        countLikes.textContent = data.likes.length//выводит новое значения лайка
-        item.likes = data.likes;
-        evt.target.classList.add('element__like_active');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-};
 
 
 
@@ -106,8 +72,11 @@ function removeCard(evt) {
 }
 // функция добавления новой карточки
 export function addNewCard(item) {
-  const elementCard = createCard(item);
-  elements.prepend(elementCard);
+  // const elementCard = createCard(item);
+  // elements.prepend(elementCard);
+  const card = new Card(item, '.element');
+  const cardElement = card.createCard();
+  elements.prepend(cardElement);
 };
 //добавление карточки по клику
 export function handleNewCardFormSubmit(evt) {
@@ -120,10 +89,15 @@ export function handleNewCardFormSubmit(evt) {
 
   api.addCard(objForCard)
     .then((data) => {
+    //console.log(data);
       addNewCard(data); //Добавление в DOM
-      closePopup(popupNewCard);
+      const popupNewCard = new Popup('.popup_new-card');
+      console.log({popupNewCard})
+      popupNewCard.closePopup();
       popupFormNewCard.reset();
-      toggleButtonState(buttonSubmitId, false, validationConfig.inactiveButtonClass);
+      const formValidator = new FormValidator(popupFormNewCard, validationConfig);
+      formValidator.enableValidation();
+      //toggleButtonState(buttonSubmitId, false, validationConfig.inactiveButtonClass);
     })
     .finally(() => buttonSubmitId.textContent = "Сохранить")
     .catch((err) => {
@@ -147,7 +121,7 @@ export function handleProfileFormSubmit(evt) {
     .finally(() => buttonSubmit.textContent = "Сохранить")
     .catch((err) => {
       console.log(err);
-    });;
+    });
 };
 //редактирование аватарки
 export function handleAvaFormSubmit(evt) {
@@ -295,21 +269,29 @@ const popupNewCardtest = document.querySelector('.popup_new-card');
 
 export class Popup {
   constructor(selector) {
-    this.selector = selector;
+    this._selector = document.querySelector(selector);
     this._handleEscClose = this._handleEscClose.bind(this);
     this.handleOver = this.handleOver.bind(this);
+
+    this.closeButton = this._selector.querySelector('.popup__close-icon');
+    this.setCloseEventListeners();
   }
 
   openPopup() {
-    this.selector.classList.add("popup_opened");
+    this._selector.classList.add("popup_opened");
     document.addEventListener('keydown', this._handleEscClose);
     document.addEventListener('click', this.handleOver);
   }
 
   closePopup() {
-    this.selector.classList.remove("popup_opened");
+    this._selector.classList.remove("popup_opened");
     document.removeEventListener('keydown', this._handleEscClose);
     document.removeEventListener('click', this.handleOver);
+  }
+
+  setCloseEventListeners() {
+    this.closeButton.addEventListener('click', this.closePopup.bind(this));
+    // this.closeButton.addEventListener('click', callbackFunc);
   }
 
   // клик по overlay
@@ -380,38 +362,34 @@ console.log(student2);
 
 
 
-class Card {
-  constructor(name, image, selector) {
+export class Card {
+  constructor(data, templateSelector) {
 
-    this.name = name;
-    this.image = image;
-    this._selector = selector;
+    this.data = data;
+    this._templateSelector = templateSelector;
+    this._popup = new Popup('.popup-photo-card');
   }
 
-  _addNewCard() {
-    const elementCard = createCard(data);
-    elements.prepend(elementCard);
-  }
 
   //функция СОЗДАНИЯ новой карточки
-  createCard(data) {
-    const elementCard = elementThere.querySelector('.element').cloneNode(true);
+  createCard() {
+    const elementCard = elementThere.querySelector(this._templateSelector).cloneNode(true);
     const cardImage = elementCard.querySelector('.element__photo');
     const countLikes = elementCard.querySelector('.element__count-likes');
     const buttonLikes = elementCard.querySelector('.element__like');
-    elementCard.querySelector('.element__title').textContent = data.name;
-    countLikes.textContent = this.likes.length;// 5 месяц лайки
-    cardImage.src = this.link;
-    cardImage.alt = this.name;
+    elementCard.querySelector('.element__title').textContent = this.data.name;
+    countLikes.textContent = this.data.likes.length;// 5 месяц лайки
+    cardImage.src = this.data.link;
+    cardImage.alt = this.data.name;
     cardImage.addEventListener('click', () => {
-      addNewPhotoCard(data.name, data.link);
+      this._addNewPhotoCard();
     });
-    buttonLikes.addEventListener('click', function (evt) {
-      toggleLike(evt, data, countLikes);
+    buttonLikes.addEventListener('click', (evt) => {
+      this._toggleLike(evt, this.data, countLikes);
     });
-    if (data.owner._id === userID.id) {
+    if (this.data.owner._id === userID.id) {
       elementCard.querySelector('.element__tresh').addEventListener('click', (evt) => {
-        api.deleteCard(data._id)
+        api.deleteCard(this.data._id)
           .then(() => {
             removeCard(evt)
           })
@@ -422,19 +400,55 @@ class Card {
     } else {
       elementCard.querySelector('.element__tresh').classList.add("element__tresh-nonActive");// удалить значек мусорник
     }
-    if (data.likes.find((like) => like._id === userID.id) ? true : false) {
+    if (this.data.likes.find((like) => like._id === userID.id) ? true : false) {
       buttonLikes.classList.add('element__like_active');
     };
 
     // функция удаления по мусорнику в создании новой карточки
     return elementCard;
   }
+
+
+  _toggleLike(evt, item, countLikes) {
+    if (item.likes.find((like) => like._id === userID.id) ? true : false) {
+      console.log("хочу удалить лайк")
+      api.delLike(item._id)
+        .then((data) => {
+          countLikes.textContent = data.likes.length//выводит новое значения лайка
+          item.likes = data.likes;
+          evt.target.classList.remove('element__like_active');
+
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    else {
+      console.log("хочу поставить лайк")
+      api.editLike(item._id)
+        .then((data) => {
+          countLikes.textContent = data.likes.length//выводит новое значения лайка
+          item.likes = data.likes;
+          evt.target.classList.add('element__like_active');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+  }
+
+  // функция добавления большой картинки
+  _addNewPhotoCard() {
+    titleBigPhotoCard.textContent = this.data.name;
+    photoBigPhotoCard.src = this.data.link;
+    photoBigPhotoCard.alt = this.data.name;
+    this._popup.openPopup();
+  }
+
 }
 
 
 
 
-const card2 = new Card("rfhfxftdcr", "yyfhy", 223, 6, "bfbf");
-console.log(card2);
-card2.createCard(card2);
+
 

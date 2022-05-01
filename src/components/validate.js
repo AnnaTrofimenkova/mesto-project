@@ -1,54 +1,69 @@
 // //5 мес массовая валидация вэбинар
 
-const showError = (errorElement, inputElement, inputErrorClass) => {
-  errorElement.textContent = inputElement.validationMessage;
-  inputElement.classList.add(inputErrorClass)
-}
 
-const hideError = (errorElement, inputElement, inputErrorClass) => {
-  errorElement.textContent = inputElement.validationMessage;
-  inputElement.classList.remove(inputErrorClass)
-}
 
-const checkInputValidity = (formElement, inputElement, config) => {
-  const isInputNotValid = !inputElement.validity.valid;
-  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
 
-  if (isInputNotValid) {
-    showError(errorElement, inputElement, config);
-  } else {
-    hideError(errorElement, inputElement, config);
+
+
+export class FormValidator {
+  constructor(formElement, config) {
+    this.config = config;
+    this.formElement = formElement;
+    this.submitButton = this.formElement.querySelector(this.config.submitButtonSelector);
   }
-}
 
-export const toggleButtonState = (button, isActive, inactiveButtonClass) => {
-  if (isActive) {
-    button.classList.remove(inactiveButtonClass);
-    button.disabled = false;
-  } else {
-    button.classList.add(inactiveButtonClass);
-    button.disabled = 'disabled';
+  _showError (errorElement, inputElement) {
+    errorElement.textContent = inputElement.validationMessage;
+    inputElement.classList.add(this.config.inputErrorClass)
   }
-}
+
+  _hideError (errorElement, inputElement) {
+    errorElement.textContent = inputElement.validationMessage;
+    inputElement.classList.remove(this.config.inputErrorClass)
+  }
+
+  _checkInputValidity (inputElement) {
+    const isInputNotValid = !inputElement.validity.valid;
+    const errorElement = this.formElement.querySelector(`.${inputElement.id}-error`);
+
+    if (isInputNotValid) {
+      this._showError(errorElement, inputElement);
+    } else {
+      this._hideError(errorElement, inputElement);
+    }
+  }
+
+ _toggleButtonState (isActive) {
+    if (isActive) {
+      this.submitButton.classList.remove(this.config.inactiveButtonClass);
+      this.submitButton.disabled = false;
+    } else {
+      this.submitButton.classList.add(this.config.inactiveButtonClass);
+      this.submitButton.disabled = 'disabled';
+    }
+  }
 
 
-const setEventListers = (formElement, { inputSelector, submitButtonSelector, inactiveButtonClass, inputErrorClass }) => {
-  const inputsList = formElement.querySelectorAll(inputSelector);
-  const submitButton = formElement.querySelector(submitButtonSelector);
+  _setEventListers () {
+    const inputsList = this.formElement.querySelectorAll(this.config.inputSelector);
 
-
-  Array.from(inputsList).forEach(inputElement => {
-    inputElement.addEventListener('input', () => {
-      const isFormValid = formElement.checkValidity();
-      checkInputValidity(formElement, inputElement, inputErrorClass)
-      toggleButtonState(submitButton, isFormValid, inactiveButtonClass)
+    Array.from(inputsList).forEach(inputElement => {
+      inputElement.addEventListener('input', () => {
+        const isFormValid = this.formElement.checkValidity();
+        this._checkInputValidity(inputElement)
+        this._toggleButtonState(isFormValid)
+      })
     })
-  })
 
-  formElement.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    console.log('отправка формы');
-  })
+    this.formElement.addEventListener('submit', (evt) => {
+      evt.preventDefault();
+      console.log('отправка формы');
+    })
+  }
+
+  enableValidation() {
+    this._setEventListers();
+  }
 
 }
 
@@ -56,8 +71,11 @@ const setEventListers = (formElement, { inputSelector, submitButtonSelector, ina
 export const enableValidation = ({ formSelector, ...rest }) => {
   const forms = document.querySelectorAll(formSelector);
   Array.from(forms).forEach(formElement => {
-    setEventListers(formElement, rest)
+    const formValidator = new FormValidator(formElement, rest)
+    formValidator.enableValidation()
+    //setEventListers(formElement, rest)
   })
+
 }
 
 
@@ -75,5 +93,4 @@ const { inputSelector, ...rest } = validationConfig;
 
 
 //enableValidation(validationConfig);
-
 

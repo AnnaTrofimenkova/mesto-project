@@ -1,7 +1,7 @@
 import './pages/index.css';
 import { openPopup, closePopup } from './components/modal.js'
 import { addNewCard, handleNewCardFormSubmit, handleProfileFormSubmit, handleAvaFormSubmit, inputName, inputProfession, Popup } from './components/card.js'
-import { enableValidation, validationConfig } from './components/validate.js'
+import { enableValidation, validationConfig, FormValidator } from './components/validate.js'
 import { getCard, getName, editName, api } from './components/api.js'
 
 
@@ -76,7 +76,7 @@ avatarEdit.addEventListener('click', () => {
   openPopup(popupAvatar);
 });
 
-const popup1 = new Popup(popupNewCard); // поправила на класс
+export const popup1 = new Popup('.popup_new-card'); // поправила на класс
 
 //открытие попапа карточки
 newCardButton.addEventListener('click', () => {
@@ -96,13 +96,13 @@ avatarPopupCloseIcon.addEventListener('click', () => {
 
 
 //закрытие попапа карточки
-popupCloseIconNewCard.addEventListener('click', () => {
-  popup1.closePopup();// поправила на класс
-});
+// popupCloseIconNewCard.addEventListener('click', () => {
+//   popup1.closePopup();// поправила на класс
+// });
 //закрытие попапа большого фото
-closeBigPhoto.addEventListener('click', () => {
-  closePopup(popBigPhotoCard)
-});
+// closeBigPhoto.addEventListener('click', () => {
+//   closePopup(popBigPhotoCard)
+// });
 
 profileForm.addEventListener('submit', handleProfileFormSubmit);
 
@@ -112,5 +112,24 @@ enableValidation(validationConfig);
 
 
 
+// import { Card, elements } from './components/card'
 
+// const cardData = {
+//   "likes": [],
+//   "_id": "626c464a57833e011bf5570a",
+//   "name": "Жак-Ив Кусто",
+//   "link": "https://www.purina.ru/sites/default/files/2021-02/kot-ili-koshka-1_0.jpg",
+//   "owner": {
+//       "name": "qwnnnnйцу",
+//       "about": "Студент",
+//       "avatar": "https://images.pexels.com/photos/11741441/pexels-photo-11741441.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+//       "_id": "386333379b5bc17b5d067749",
+//       "cohort": "plus-cohort-8"
+//   },
+//   "createdAt": "2022-04-29T20:10:50.719Z"
+// }
 
+// addNewCard
+// const card = new Card(cardData, '.element');
+// const cardElement = card.createCard();
+// elements.prepend(cardElement);
