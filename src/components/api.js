@@ -13,108 +13,179 @@ const checkResponse = (res) => {
 }
 
 // получаем карточки с сервера
-export function getCard() {
-  return fetch(`${config.baseUrl}/cards`, {
-    headers: config.headers
-  })
-    .then(checkResponse)
-}
+// export function getCard() {
+//   return fetch(`${config.baseUrl}/cards`, {
+//     headers: config.headers
+//   })
+//     .then(checkResponse)
+// }
 
-// получаем профиль с сервера
-export function getName() {
-  return fetch(`${config.baseUrl}/users/me`, {
-    headers: config.headers
-  })
-    .then(checkResponse)
-}
+// // получаем профиль с сервера
+// export function getName() {
+//   return fetch(`${config.baseUrl}/users/me`, {
+//     headers: config.headers
+//   })
+//     .then(checkResponse)
+// }
 
-// меняем имя профиля на  сервере
-export function editName(newName) {
-  return fetch(`${config.baseUrl}/users/me`, {
-    method: 'PATCH',
-    headers: config.headers,
-    body: JSON.stringify(newName)
-  })
-    .then(checkResponse)
-}
+// // меняем имя профиля на  сервере
+// export function editName(newName) {
+//   return fetch(`${config.baseUrl}/users/me`, {
+//     method: 'PATCH',
+//     headers: config.headers,
+//     body: JSON.stringify(newName)
+//   })
+//     .then(checkResponse)
+// }
 
-// добавляем на сервер карточку
-export function addCard(newCardSer) {
-  return fetch(`${config.baseUrl}/cards`, {
-    method: 'POST',
-    headers: config.headers,
-    //body: JSON.stringify(newCardSer)
-    body: JSON.stringify({
-      name: newCardSer.name,
-      link: newCardSer.link
-    })
-  })
-    .then(checkResponse)
-}
-// улаляем карточку с сервера
-export function deleteCard(id) {
-  return fetch(`${config.baseUrl}/cards/${id}`, {
-    method: 'DELETE',
-    headers: config.headers
-  })
-    .then(checkResponse);
-}
-
-
-
-// записываем лайк на сервер
-export function editLike(id) {
-  return fetch(`${config.baseUrl}/cards/likes/${id}`, {
-    method: 'PUT',
-    headers: config.headers,
-  })
-    .then(checkResponse)
-}
-
-
-
-// удаляем лайк с сервера
-export function delLike(id) {
-  return fetch(`${config.baseUrl}/cards/likes/${id}`, {
-    method: 'DELETE',
-    headers: config.headers,
-  })
-    .then(checkResponse)
-}
-
-
-// меняем аватарку
-export function editAva(newURI) {
-  return fetch(`${config.baseUrl}/users/me/avatar`, {
-    method: 'PATCH',
-    headers: config.headers,
-    body: JSON.stringify(newURI)
-  })
-    .then(checkResponse)
-}
-
-// const testURL = {
-//   avatar: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-// };
-// editAva(testURL);
-
-
-
-
-
-
-// let idTest = "625055043407a100bb049349"
-// delLike(idTest);
-
-// смотрю на айдишки
-
-// editLikeTest()
-//   .then((data) => {
-//     data.forEach(function (item) {
-//       console.log(item._id, item.name, item.likes.length);
+// // добавляем на сервер карточку
+// export function addCard(newCardSer) {
+//   return fetch(`${config.baseUrl}/cards`, {
+//     method: 'POST',
+//     headers: config.headers,
+//     //body: JSON.stringify(newCardSer)
+//     body: JSON.stringify({
+//       name: newCardSer.name,
+//       link: newCardSer.link
 //     })
-//   });
+//   })
+//     .then(checkResponse)
+// }
+// // улаляем карточку с сервера
+// export function deleteCard(id) {
+//   return fetch(`${config.baseUrl}/cards/${id}`, {
+//     method: 'DELETE',
+//     headers: config.headers
+//   })
+//     .then(checkResponse);
+// }
 
+
+
+// // записываем лайк на сервер
+// export function editLike(id) {
+//   return fetch(`${config.baseUrl}/cards/likes/${id}`, {
+//     method: 'PUT',
+//     headers: config.headers,
+//   })
+//     .then(checkResponse)
+// }
+
+
+
+// // удаляем лайк с сервера
+// export function delLike(id) {
+//   return fetch(`${config.baseUrl}/cards/likes/${id}`, {
+//     method: 'DELETE',
+//     headers: config.headers,
+//   })
+//     .then(checkResponse)
+// }
+
+
+// // меняем аватарку
+// export function editAva(newURI) {
+//   return fetch(`${config.baseUrl}/users/me/avatar`, {
+//     method: 'PATCH',
+//     headers: config.headers,
+//     body: JSON.stringify(newURI)
+//   })
+//     .then(checkResponse)
+// }
+
+
+// класс
+export class Api {
+  constructor(config) {
+    this._baseUrl = config.baseUrl;
+    this._headers = config.headers;
+  }
+
+  // получаем карточки с сервера
+  getCard() {
+    return fetch(`${this._baseUrl}/cards`, {
+      headers: this._headers
+    })
+      .then(checkResponse)
+  }
+
+  // получаем профиль с сервера
+  getName() {
+    return fetch(`${this._baseUrl}/users/me`, {
+      headers: this._headers
+    })
+      .then(checkResponse)
+  }
+
+  // меняем имя профиля на  сервере
+  editName(newName) {
+    return fetch(`${this._baseUrl}/users/me`, {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify(newName)
+    })
+      .then(checkResponse)
+  }
+
+  // добавляем на сервер карточку
+  addCard(newCardSer) {
+    return fetch(`${this._baseUrl}/cards`, {
+      method: 'POST',
+      headers: this._headers,
+      body: JSON.stringify({
+        name: newCardSer.name,
+        link: newCardSer.link
+      })
+    })
+      .then(checkResponse)
+  }
+  // улаляем карточку с сервера
+  deleteCard(id) {
+    return fetch(`${this._baseUrl}/cards/${id}`, {
+      method: 'DELETE',
+      headers: this._headers
+    })
+      .then(checkResponse);
+  }
+
+
+
+  // записываем лайк на сервер
+  editLike(id) {
+    return fetch(`${this._baseUrl}/cards/likes/${id}`, {
+      method: 'PUT',
+      headers: this._headers,
+    })
+      .then(checkResponse)
+  }
+
+
+
+  // удаляем лайк с сервера
+  delLike(id) {
+    return fetch(`${this._baseUrl}/cards/likes/${id}`, {
+      method: 'DELETE',
+      headers: this._headers,
+    })
+      .then(checkResponse)
+  }
+
+
+  // меняем аватарку
+  editAva(newURI) {
+    return fetch(`${this._baseUrl}/users/me/avatar`, {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify(newURI)
+    })
+      .then(checkResponse)
+  }
+
+}
+const api = new Api(config);
+export {
+  api
+}
 
 
 

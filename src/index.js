@@ -1,8 +1,8 @@
 import './pages/index.css';
 import { openPopup, closePopup } from './components/modal.js'
-import { addNewCard, handleNewCardFormSubmit, handleProfileFormSubmit, handleAvaFormSubmit, inputName, inputProfession } from './components/card.js'
+import { addNewCard, handleNewCardFormSubmit, handleProfileFormSubmit, handleAvaFormSubmit, inputName, inputProfession, Popup } from './components/card.js'
 import { enableValidation, validationConfig } from './components/validate.js'
-import { getCard, getName, editName } from './components/api.js'
+import { getCard, getName, editName, api } from './components/api.js'
 
 
 
@@ -10,12 +10,13 @@ import { getCard, getName, editName } from './components/api.js'
 export const profileTitle = document.querySelector('.profile__title');
 export const profileSubtitle = document.querySelector('.profile__subtitle');
 export const profileAvatar = document.querySelector('.profile__avatar');
-
 export const userID = { id: "" }
 
 
+//const api = new Api(config);
+console.log(api)
 
-Promise.all([getName(), getCard()])
+Promise.all([api.getName(), api.getCard()])
   .then(([userData, cards]) => {
     profileTitle.textContent = userData.name;
     profileSubtitle.textContent = userData.about;
@@ -55,7 +56,7 @@ export const popupNewCard = document.querySelector('.popup_new-card');
 export const popupFormNewCard = document.querySelector('.popup__form_new-card');
 const popupCloseIconNewCard = document.querySelector('.popup__close-icon_new-card');
 const popupButtonNewCard = document.querySelector('#popup__button_new_card');
-
+console.log(popupNewCard);
 
 //фото карточек
 export const popBigPhotoCard = document.querySelector('.popup-photo-card');
@@ -75,9 +76,11 @@ avatarEdit.addEventListener('click', () => {
   openPopup(popupAvatar);
 });
 
+const popup1 = new Popup(popupNewCard); // поправила на класс
+
 //открытие попапа карточки
 newCardButton.addEventListener('click', () => {
-  openPopup(popupNewCard);
+  popup1.openPopup(); // поправила на класс
 });
 
 
@@ -94,7 +97,7 @@ avatarPopupCloseIcon.addEventListener('click', () => {
 
 //закрытие попапа карточки
 popupCloseIconNewCard.addEventListener('click', () => {
-  closePopup(popupNewCard)
+  popup1.closePopup();// поправила на класс
 });
 //закрытие попапа большого фото
 closeBigPhoto.addEventListener('click', () => {
