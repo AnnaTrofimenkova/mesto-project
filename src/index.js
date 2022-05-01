@@ -1,8 +1,9 @@
 import './pages/index.css';
 import { openPopup, closePopup } from './components/modal.js'
-import { addNewCard, handleNewCardFormSubmit, handleProfileFormSubmit, handleAvaFormSubmit, inputName, inputProfession, Popup } from './components/card.js'
+import { Popup } from './components//Popup'
+import { addNewCard, handleNewCardFormSubmit, handleProfileFormSubmit, handleAvaFormSubmit, inputName, inputProfession } from './components/card.js'
 import { enableValidation, validationConfig, FormValidator } from './components/validate.js'
-import { getCard, getName, editName, api } from './components/api.js'
+import { api } from './components/api.js'
 
 
 
@@ -13,8 +14,6 @@ export const profileAvatar = document.querySelector('.profile__avatar');
 export const userID = { id: "" }
 
 
-//const api = new Api(config);
-console.log(api)
 
 Promise.all([api.getName(), api.getCard()])
   .then(([userData, cards]) => {
