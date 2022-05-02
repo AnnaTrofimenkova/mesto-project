@@ -14,6 +14,7 @@ export class UserInfo {
     // сделать запрос на сервер и если ок, то заполняем элементы с title & subtitle
     api.getName();
 
+
   }
 
   setUserInfo() {
