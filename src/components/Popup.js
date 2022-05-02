@@ -43,3 +43,18 @@ export class Popup {
   }
 
 }
+
+export class PopupWithImage extends Popup {
+  constructor(selector) {
+    super(selector)
+  }
+
+  // тут что-то типа эдд нью фото кард из класса кард
+  openPopup(name, link) {
+    this._selector.classList.add("popup_opened");
+    document.addEventListener('keydown', this._handleEscClose);
+    document.addEventListener('click', this.handleOver);
+  }
+
+
+}

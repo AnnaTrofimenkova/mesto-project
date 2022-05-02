@@ -1,10 +1,10 @@
 import './pages/index.css';
 import { openPopup, closePopup } from './components/modal.js'
-import { Popup } from './components//Popup'
+import { Popup } from './components/Popup'
 import { addNewCard, handleNewCardFormSubmit, handleProfileFormSubmit, handleAvaFormSubmit, inputName, inputProfession } from './components/card.js'
 import { enableValidation, validationConfig, FormValidator } from './components/validate.js'
 import { api } from './components/api.js'
-
+import { UserInfo } from './components/UserInfo.js'
 
 
 // константы редактированиz значения в попапе
@@ -109,26 +109,3 @@ profileForm.addEventListener('submit', handleProfileFormSubmit);
 // 5 мес массовая валидация
 enableValidation(validationConfig);
 
-
-
-// import { Card, elements } from './components/card'
-
-// const cardData = {
-//   "likes": [],
-//   "_id": "626c464a57833e011bf5570a",
-//   "name": "Жак-Ив Кусто",
-//   "link": "https://www.purina.ru/sites/default/files/2021-02/kot-ili-koshka-1_0.jpg",
-//   "owner": {
-//       "name": "qwnnnnйцу",
-//       "about": "Студент",
-//       "avatar": "https://images.pexels.com/photos/11741441/pexels-photo-11741441.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-//       "_id": "386333379b5bc17b5d067749",
-//       "cohort": "plus-cohort-8"
-//   },
-//   "createdAt": "2022-04-29T20:10:50.719Z"
-// }
-
-// addNewCard
-// const card = new Card(cardData, '.element');
-// const cardElement = card.createCard();
-// elements.prepend(cardElement);
