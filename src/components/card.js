@@ -27,8 +27,6 @@ export const inputProfession = document.querySelector('#profession');
 
 
 
-
-
 //функция удаления карточки
 function removeCard(evt) {
   const target = evt.target;
@@ -68,41 +66,11 @@ export function handleNewCardFormSubmit(evt) {
       console.log(err);
     });
 };
-//редактирование значения в попапе
-export function handleProfileFormSubmit(evt) {
-  evt.preventDefault();
-  buttonSubmit.textContent = "Сохранение...";
-  const objForPrifile = {
-    name: profileTitle.textContent,
-    about: profileSubtitle.textContent
-  }
-  api.editName(objForPrifile)
-    .then(() => {
-      closePopup(popupProfile)
-      profileTitle.textContent = inputName.value;
-      profileSubtitle.textContent = inputProfession.value;
-    })
-    .finally(() => buttonSubmit.textContent = "Сохранить")
-    .catch((err) => {
-      console.log(err);
-    });
-};
+
 //редактирование аватарки
 export function handleAvaFormSubmit(evt) {
   evt.preventDefault();
-  buttonSubmitAva.textContent = "Сохранение...";
-  const objForAva = {
-    avatar: inputAvatar.value,
-  }
-  api.editAva(objForAva)
-    .then((data) => {
-      closePopup(popupAvatar)
-      profileAvatar.src = data.avatar;
-    })
-    .finally(() => buttonSubmitAva.textContent = "Сохранить")
-    .catch((err) => {
-      console.log(err);
-    });;
+
 };
 
 
