@@ -1,22 +1,22 @@
 
 import { toggleButtonState, validationConfig, FormValidator } from './validate'
-import { Popup } from './Popup'
+import { Popup, PopupWithImage } from './Popup'
 import { openPopup, closePopup } from './modal.js'
-import { popBigPhotoCard, popupProfile, popupNewCard, profileTitle, profileSubtitle, popupFormNewCard, popupAvatar, profileAvatar, userID } from '../index.js'
+import { popBigPhotoCard, popupProfile, popupNewCard, profileTitle, profileSubtitle, popupFormNewCard, popupAvatar, profileAvatar } from '../index.js'
 import { api } from './api.js'
+import { Sextion } from './Sextion.js'
 
 
 // константы аватара
 const inputAvatar = document.querySelector('#link-new-avatar');
 const buttonSubmitAva = document.querySelector("#popup__button_new_avatar")
 // константы добавления большой картинки
-const titleBigPhotoCard = document.querySelector(".popup-photo-card__title");
-const photoBigPhotoCard = document.querySelector(".popup-photo-card__photo");
+
 //константы СОЗДАНИЯ новой карточки
 const elementThere = document.querySelector('#element-template').content;//их версия
 
 // константы добавления новой карточки
-export const elements = document.querySelector('.elements');
+
 const buttonSubmit = document.querySelector('.popup__button');
 const buttonSubmitId = document.querySelector('#popup__button_new_card');
 // константы добавления карточки по клику
@@ -27,19 +27,9 @@ export const inputProfession = document.querySelector('#profession');
 
 
 
-//функция удаления карточки
-function removeCard(evt) {
-  const target = evt.target;
-  target.closest('.element').remove()
-}
-// функция добавления новой карточки
-export function addNewCard(item) {
-  // const elementCard = createCard(item);
-  // elements.prepend(elementCard);
-  const card = new Card(item, '.element');
-  const cardElement = card.createCard();
-  elements.prepend(cardElement);
-};
+
+
+
 //добавление карточки по клику
 export function handleNewCardFormSubmit(evt) {
   evt.preventDefault();
@@ -50,11 +40,11 @@ export function handleNewCardFormSubmit(evt) {
   }
 
   api.addCard(objForCard)
-    .then((data) => {
-      //console.log(data);
-      addNewCard(data); //Добавление в DOM
+    .then((newCard) => {
+      const section = new Sextion(null, '.elements', newCard.owner);
+      section.addItem(newCard); //Добавление в DOM
       const popupNewCard = new Popup('.popup_new-card');
-      console.log({ popupNewCard })
+
       popupNewCard.closePopup();
       popupFormNewCard.reset();
       const formValidator = new FormValidator(popupFormNewCard, validationConfig);
@@ -67,28 +57,14 @@ export function handleNewCardFormSubmit(evt) {
     });
 };
 
-//редактирование аватарки
-export function handleAvaFormSubmit(evt) {
-  evt.preventDefault();
-
-};
-
-
-
-
-
-const popupNewCardtest = document.querySelector('.popup_new-card');
-
-
-
-
 
 export class Card {
-  constructor(data, templateSelector) {
+  constructor(data, templateSelector, user) {
 
     this.data = data;
     this._templateSelector = templateSelector;
-    this._popup = new Popup('.popup-photo-card');
+    this._popup = new PopupWithImage('.popup-photo-card');
+    this.user = user;
   }
 
 
@@ -108,11 +84,11 @@ export class Card {
     buttonLikes.addEventListener('click', (evt) => {
       this._toggleLike(evt, this.data, countLikes);
     });
-    if (this.data.owner._id === userID.id) {
+    if (this.data.owner._id === this.user._id) {
       elementCard.querySelector('.element__tresh').addEventListener('click', (evt) => {
         api.deleteCard(this.data._id)
           .then(() => {
-            removeCard(evt)
+            this._removeCardFromDOM(evt)
           })
           .catch((err) => {
             console.log(err);
@@ -121,7 +97,7 @@ export class Card {
     } else {
       elementCard.querySelector('.element__tresh').classList.add("element__tresh-nonActive");// удалить значек мусорник
     }
-    if (this.data.likes.find((like) => like._id === userID.id) ? true : false) {
+    if (this.data.likes.find((like) => like._id === this.user._id) ? true : false) {
       buttonLikes.classList.add('element__like_active');
     };
 
@@ -129,9 +105,15 @@ export class Card {
     return elementCard;
   }
 
+  //функция удаления карточки
+  _removeCardFromDOM(evt) {
+    const target = evt.target;
+    target.closest('.element').remove()
+  }
+
 
   _toggleLike(evt, item, countLikes) {
-    if (item.likes.find((like) => like._id === userID.id) ? true : false) {
+    if (item.likes.find((like) => like._id === this.user._id) ? true : false) {
       console.log("хочу удалить лайк")
       api.delLike(item._id)
         .then((data) => {
@@ -160,10 +142,7 @@ export class Card {
 
   // функция добавления большой картинки
   _addNewPhotoCard() {
-    titleBigPhotoCard.textContent = this.data.name;
-    photoBigPhotoCard.src = this.data.link;
-    photoBigPhotoCard.alt = this.data.name;
-    this._popup.openPopup();
+    this._popup.openPopup(this.data.name, this.data.link);
   }
 
 }

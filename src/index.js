@@ -5,28 +5,41 @@ import { addNewCard, handleNewCardFormSubmit, handleAvaFormSubmit, inputName, in
 import { enableValidation, validationConfig, FormValidator } from './components/validate.js'
 import { api } from './components/api.js'
 import { UserInfo } from './components/UserInfo.js'
+import { Sextion } from './components/Sextion.js'
 
 
 // константы редактированиz значения в попапе
 export const profileTitle = document.querySelector('.profile__title');
 export const profileSubtitle = document.querySelector('.profile__subtitle');
 export const profileAvatar = document.querySelector('.profile__avatar');
-export const userID = { id: "" }
+
 
 const userInfo = new UserInfo(".profile__title", ".profile__subtitle", ".profile__avatar");
 userInfo.getUserInfo()
 
-api.getCard().then(cards => {
+Promise.all([api.getCard(), api.getName()]).then(([cards, user]) => {
 
-    //userID.id = userData._id;
-    cards.forEach(function (item) {
-      addNewCard(item);
-    })
+  const section = new Sextion(cards, '.elements', user);
+  section.renderer();
 
-  })
-  .catch(err => {
-    console.log(err);
-  });
+
+
+}).catch(err => {
+  console.log(err);
+});
+
+
+// api.getCard().then(cards => {
+
+//   //userID.id = userData._id;
+//   cards.forEach(function (item) {
+//     addNewCard(item);
+//   })
+
+// })
+//   .catch(err => {
+//     console.log(err);
+//   });
 
 
 
