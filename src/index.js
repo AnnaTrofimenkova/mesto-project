@@ -71,7 +71,7 @@ const closeBigPhoto = document.querySelector('.popup-photo-card__close-icon');
 
 
 popupFormNewCard.addEventListener('submit', handleNewCardFormSubmit);
-popupFormAvatar.addEventListener('submit', handleAvaFormSubmit);
+//popupFormAvatar.addEventListener('submit', handleAvaFormSubmit);
 
 
 const popupProfile = new PopupWithForm('.popup_profile');
