@@ -1,10 +1,6 @@
 // //5 мес массовая валидация вэбинар
 
 
-
-
-
-
 export class FormValidator {
   constructor(formElement, config) {
     this.config = config;
@@ -12,17 +8,17 @@ export class FormValidator {
     this.submitButton = this.formElement.querySelector(this.config.submitButtonSelector);
   }
 
-  _showError (errorElement, inputElement) {
+  _showError(errorElement, inputElement) {
     errorElement.textContent = inputElement.validationMessage;
     inputElement.classList.add(this.config.inputErrorClass)
   }
 
-  _hideError (errorElement, inputElement) {
+  _hideError(errorElement, inputElement) {
     errorElement.textContent = inputElement.validationMessage;
     inputElement.classList.remove(this.config.inputErrorClass)
   }
 
-  _checkInputValidity (inputElement) {
+  _checkInputValidity(inputElement) {
     const isInputNotValid = !inputElement.validity.valid;
     const errorElement = this.formElement.querySelector(`.${inputElement.id}-error`);
 
@@ -33,7 +29,7 @@ export class FormValidator {
     }
   }
 
- _toggleButtonState (isActive) {
+  _toggleButtonState(isActive) {
     if (isActive) {
       this.submitButton.classList.remove(this.config.inactiveButtonClass);
       this.submitButton.disabled = false;
@@ -44,7 +40,7 @@ export class FormValidator {
   }
 
 
-  _setEventListers () {
+  _setEventListers() {
     const inputsList = this.formElement.querySelectorAll(this.config.inputSelector);
 
     Array.from(inputsList).forEach(inputElement => {
@@ -57,7 +53,6 @@ export class FormValidator {
 
     this.formElement.addEventListener('submit', (evt) => {
       evt.preventDefault();
-      console.log('отправка формы');
     })
   }
 
@@ -73,7 +68,7 @@ export const enableValidation = ({ formSelector, ...rest }) => {
   Array.from(forms).forEach(formElement => {
     const formValidator = new FormValidator(formElement, rest)
     formValidator.enableValidation()
-    //setEventListers(formElement, rest)
+
   })
 
 }
@@ -87,10 +82,6 @@ export const validationConfig = {
   inputErrorClass: 'popup__input_type_error',
 }
 
-
 const { inputSelector, ...rest } = validationConfig;
-//console.log(rest);
 
-
-//enableValidation(validationConfig);
 

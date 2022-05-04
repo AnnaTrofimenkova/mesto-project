@@ -1,5 +1,5 @@
-import { api } from './api.js'
-import { Popup, PopupWithForm } from './Popup.js';
+import { api } from './Api.js'
+import { PopupWithForm } from './Popup.js';
 
 
 //  Это ПРОФАЙЛ!!
@@ -75,8 +75,4 @@ export class UserInfo {
 
 }
 
-//я же на входе ничего не передаю
-// const userInfo1 =
-// userInfo1.getUserInfo()
-// console.log(userInfo1.getUserInfo());
 

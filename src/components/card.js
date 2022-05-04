@@ -1,61 +1,16 @@
 
-import { toggleButtonState, validationConfig, FormValidator } from './validate'
-import { Popup, PopupWithImage } from './Popup'
-import { openPopup, closePopup } from './modal.js'
-import { popBigPhotoCard, popupProfile, popupNewCard, profileTitle, profileSubtitle, popupFormNewCard, popupAvatar, profileAvatar } from '../index.js'
-import { api } from './api.js'
-import { Sextion } from './Sextion.js'
+import { PopupWithImage } from './Popup'
+import { api } from './Api.js'
 
-
-// константы аватара
-const inputAvatar = document.querySelector('#link-new-avatar');
-const buttonSubmitAva = document.querySelector("#popup__button_new_avatar")
-// константы добавления большой картинки
 
 //константы СОЗДАНИЯ новой карточки
 const elementThere = document.querySelector('#element-template').content;//их версия
 
 // константы добавления новой карточки
 
-const buttonSubmit = document.querySelector('.popup__button');
-const buttonSubmitId = document.querySelector('#popup__button_new_card');
-// константы добавления карточки по клику
-const inputNameNewCard = document.querySelector('#name-new-card');
-const inputLink = document.querySelector('#link-new-card');
 export const inputName = document.querySelector('#name');
 export const inputProfession = document.querySelector('#profession');
 
-
-
-
-
-
-//добавление карточки по клику
-export function handleNewCardFormSubmit(evt) {
-  evt.preventDefault();
-  buttonSubmitId.textContent = "Сохранение...";
-  const objForCard = {
-    name: inputNameNewCard.value,
-    link: inputLink.value
-  }
-
-  api.addCard(objForCard)
-    .then((newCard) => {
-      const section = new Sextion(null, '.elements', newCard.owner);
-      section.addItem(newCard); //Добавление в DOM
-      const popupNewCard = new Popup('.popup_new-card');
-
-      popupNewCard.closePopup();
-      popupFormNewCard.reset();
-      const formValidator = new FormValidator(popupFormNewCard, validationConfig);
-      formValidator.enableValidation();
-      //toggleButtonState(buttonSubmitId, false, validationConfig.inactiveButtonClass);
-    })
-    .finally(() => buttonSubmitId.textContent = "Сохранить")
-    .catch((err) => {
-      console.log(err);
-    });
-};
 
 
 export class Card {
@@ -67,9 +22,8 @@ export class Card {
     this.user = user;
   }
 
-
   //функция СОЗДАНИЯ новой карточки
-  createCard() {
+  createDOMCard() {
     const elementCard = elementThere.querySelector(this._templateSelector).cloneNode(true);
     const cardImage = elementCard.querySelector('.element__photo');
     const countLikes = elementCard.querySelector('.element__count-likes');
