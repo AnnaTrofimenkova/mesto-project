@@ -43,6 +43,14 @@ export class Popup {
     }
   }
 
+  setEventListeners() {
+    this._popup.addEventListener("click", (event) => {
+      if (event.target.classList.contains("popup_opened")) {
+        this.close();
+      }
+    })
+  }
+
 }
 
 export class PopupWithImage extends Popup {
@@ -62,10 +70,11 @@ export class PopupWithImage extends Popup {
 }
 
 export class PopupWithForm extends Popup {
-  constructor(selector) {
+  constructor(selector, submitFormCallback) {
     super(selector);
     this._buttonSubmit = this._popup.querySelector('.popup__button');
     this.popupForm = this._popup.querySelector('.popup__form');
+    this.submitFormCallback = submitFormCallback;
   }
 
   setSubmitButtonText(text) {
@@ -75,10 +84,6 @@ export class PopupWithForm extends Popup {
   setInputValue(inputSelector, value) {
     const input = this._popup.querySelector(inputSelector);
     input.value = value;
-  }
-
-  getInputValue(inputSelector) {
-    return this._popup.querySelector(inputSelector).value;
   }
 
   setSubmitEventListener(listenerFunction) {
@@ -92,5 +97,23 @@ export class PopupWithForm extends Popup {
   resetValidation() {
     const formValidator = new FormValidator(this.popupForm, validationConfig);
     formValidator.enableValidation();
+  }
+
+  _getInputValues() {
+		const inputs = this.popupForm.querySelectorAll('.popup__input');
+		const inputValues = {};
+
+		inputs.forEach(input => {
+			inputValues[input.name] = input.value;
+		});
+		return inputValues;
+	}
+
+  setEventListeners() {
+    super.setEventListeners();
+    this.popupForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      this.submitFormCallback(this._getInputValues());
+    })
   }
 }

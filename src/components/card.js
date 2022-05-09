@@ -14,11 +14,11 @@ export const inputProfession = document.querySelector('#profession');
 
 
 export class Card {
-  constructor(data, templateSelector, user) {
+  constructor(data, templateSelector, user, popupWithImage) {
 
     this.data = data;
     this._templateSelector = templateSelector;
-    this._popup = new PopupWithImage('.popup-photo-card');
+    this._popup = popupWithImage; 
     this.user = user;
   }
 

@@ -1,5 +1,5 @@
 import './pages/index.css';
-import { PopupWithForm } from './components/Popup'
+import { PopupWithForm, PopupWithImage } from './components/Popup'
 import { enableValidation, validationConfig } from './components/Validate.js'
 import { api } from './components/Api.js'
 import { UserInfo } from './components/UserInfo.js'
@@ -16,9 +16,50 @@ export const profileAvatar = document.querySelector('.profile__avatar');
 const userInfo = new UserInfo(".profile__title", ".profile__subtitle", ".profile__avatar");
 
 // попапы
-const popupProfile = new PopupWithForm('.popup_profile');
-const popupAvatar = new PopupWithForm('.popup_new-avatar');
-const popupNewCard = new PopupWithForm('.popup_new-card');
+const popupProfile = new PopupWithForm('.popup_profile', (inputValues) => {
+  // клик по кнопке отправке данных профиля (по кнопке Сохранить)
+  popupProfile.setSubmitButtonText("Сохранить...");
+
+  const objForPrifile = {
+    name: inputValues['name'],
+    about: inputValues['profession']
+  }
+
+  api.editName(objForPrifile)
+    .then((userData) => {
+      popupProfile.closePopup()
+      userInfo.setUserInfo(userData);
+    })
+    .finally(() => popupProfile.setSubmitButtonText("Сохранить"))
+    .catch((err) => {
+      console.log(err);
+    });
+
+});
+
+popupProfile.setEventListeners();
+
+const popupAvatar = new PopupWithForm('.popup_new-avatar', (inputValues) => {
+  popupAvatar.setSubmitButtonText("Сохранить...");
+
+  const objForAva = {
+    avatar: inputValues['avatar'],
+  }
+
+  api.editAva(objForAva)
+    .then((data) => {
+      popupAvatar.closePopup();
+      profileAvatar.src = data.avatar;
+    })
+    .finally(() => popupAvatar.setSubmitButtonText("Сохранить"))
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+popupAvatar.setEventListeners();
+
+const popupWithImage = new PopupWithImage('.popup-photo-card');
 
 api.getName()
   .then(userData => {
@@ -32,26 +73,24 @@ api.getName()
 
 Promise.all([api.getCard(), api.getName()]).then(([cards, user]) => {
   const section = new Sextion(cards, '.elements', (cardItem) => {
-    const card = new Card(cardItem, '.element', user);
+    const card = new Card(cardItem, '.element', user, popupWithImage);
     const cardElement = card.createDOMCard();
     section.elements.prepend(cardElement);
   });
 
   section.render();
 
-  popupNewCard.setSubmitEventListener((event) => {
-    event.preventDefault();
-
+  const popupNewCard = new PopupWithForm('.popup_new-card', (inputValues) => {
     popupNewCard.setSubmitButtonText("Сохранение...");
 
     const objForCard = {
-      name: popupNewCard.getInputValue('#name-new-card'),
-      link: popupNewCard.getInputValue('#link-new-card')
+      name: inputValues['name'],
+      link: inputValues['url']
     }
 
     api.addCard(objForCard)
       .then((newCard) => {
-        const card = new Card(newCard, '.element', newCard.owner);
+        const card = new Card(newCard, '.element', newCard.owner, popupWithImage);
         const cardElement = card.createDOMCard();
         section.addItem(cardElement); //Добавление в DOM
         popupNewCard.closePopup();
@@ -63,7 +102,17 @@ Promise.all([api.getCard(), api.getName()]).then(([cards, user]) => {
       .catch((err) => {
         console.log(err);
       });
+    });
+
+  popupNewCard.setEventListeners();
+
+  const newCardButton = document.querySelector('.profile__add-button');
+  //открытие попапа карточки
+  newCardButton.addEventListener('click', () => {
+    popupNewCard.openPopup(); // поправила на класс
   });
+
+
 
 }).catch(err => {
   console.log(err);
@@ -78,7 +127,7 @@ const avatarEdit = document.querySelector('.profile__avatar-cont');// 5 меся
 
 
 //попап новой карточки
-const newCardButton = document.querySelector('.profile__add-button');
+
 export const popupFormNewCard = document.querySelector('.popup__form_new-card');
 
 
@@ -103,55 +152,8 @@ avatarEdit.addEventListener('click', () => {
 });
 
 
-// //открытие попапа карточки
-newCardButton.addEventListener('click', () => {
-  popupNewCard.openPopup(); // поправила на класс
-});
-
-// клик по кнопке отправке данных профиля (по кнопке Сохранить)
-popupProfile.setSubmitEventListener((event) => {
-  event.preventDefault();
-
-  popupProfile.setSubmitButtonText("Сохранить...");
 
 
-  const objForPrifile = {
-    name: popupProfile.getInputValue('#name'),
-    about: popupProfile.getInputValue('#profession')
-  }
-  api.editName(objForPrifile)
-    .then((userData) => {
-      //closePopup(popupProfile)
-      popupProfile.closePopup()
-      userInfo.setUserInfo(userData);
-    })
-    .finally(() => popupProfile.setSubmitButtonText("Сохранить"))
-    .catch((err) => {
-      console.log(err);
-    });
-});
-
-// клик по кнопке Сохранить попап Аватар
-popupAvatar.setSubmitEventListener((event) => {
-    event.preventDefault();
-
-    popupProfile.setSubmitButtonText("Сохранить...");
-
-    const objForAva = {
-      avatar: popupAvatar.getInputValue('#link-new-avatar'),
-    }
-
-    api.editAva(objForAva)
-      .then((data) => {
-        console.log(data)
-        popupAvatar.closePopup();
-        profileAvatar.src = data.avatar;
-      })
-      .finally(() => popupProfile.setSubmitButtonText("Сохранить"))
-      .catch((err) => {
-        console.log(err);
-      });
-});
 
 
 
