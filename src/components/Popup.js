@@ -1,4 +1,4 @@
-import { validationConfig, FormValidator } from "./Validate";
+
 
 export class Popup {
   constructor(selector) {
@@ -28,7 +28,7 @@ export class Popup {
 
   // клик по overlay
   handleOver(evt) {
-    if (evt.target.classList.contains('popup')) {
+    if (evt.target.classList.contains('popup_opened')) {
       this.closePopup(evt.target);
     }
   }
@@ -46,7 +46,7 @@ export class Popup {
   setEventListeners() {
     this._popup.addEventListener("click", (event) => {
       if (event.target.classList.contains("popup_opened")) {
-        this.close();
+          this.closePopup();
       }
     })
   }
@@ -77,6 +77,10 @@ export class PopupWithForm extends Popup {
     this.submitFormCallback = submitFormCallback;
   }
 
+  setFormValidator(formValidator) {
+    this._formValidator = formValidator;
+  }
+
   setSubmitButtonText(text) {
     this._buttonSubmit.textContent = text;
   }
@@ -90,13 +94,14 @@ export class PopupWithForm extends Popup {
     this._buttonSubmit.addEventListener('click', listenerFunction);
   }
 
-  resetForm() {
+  closePopup() {
+    super.closePopup();
     this.popupForm.reset();
   }
 
   resetValidation() {
-    const formValidator = new FormValidator(this.popupForm, validationConfig);
-    formValidator.enableValidation();
+    console.log("'hdfjkdkf");
+   this._formValidator.enableValidation();
   }
 
   _getInputValues() {

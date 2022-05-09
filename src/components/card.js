@@ -1,5 +1,5 @@
 
-import { PopupWithImage } from './Popup'
+
 import { api } from './Api.js'
 
 
@@ -18,7 +18,7 @@ export class Card {
 
     this.data = data;
     this._templateSelector = templateSelector;
-    this._popup = popupWithImage; 
+    this._popup = popupWithImage;
     this.user = user;
   }
 

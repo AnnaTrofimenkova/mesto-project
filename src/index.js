@@ -1,6 +1,6 @@
 import './pages/index.css';
 import { PopupWithForm, PopupWithImage } from './components/Popup'
-import { enableValidation, validationConfig } from './components/Validate.js'
+import { enableValidation, FormValidator, validationConfig } from './components/Validate.js'
 import { api } from './components/Api.js'
 import { UserInfo } from './components/UserInfo.js'
 import { Sextion } from './components/Sextion.js'
@@ -94,7 +94,6 @@ Promise.all([api.getCard(), api.getName()]).then(([cards, user]) => {
         const cardElement = card.createDOMCard();
         section.addItem(cardElement); //Добавление в DOM
         popupNewCard.closePopup();
-        popupNewCard.resetForm();
         popupNewCard.resetValidation();
         popupNewCard.setSubmitButtonText("Сохранить");
       })
@@ -103,8 +102,10 @@ Promise.all([api.getCard(), api.getName()]).then(([cards, user]) => {
         console.log(err);
       });
     });
+    
+    popupNewCard.setEventListeners();
+    popupNewCard.setFormValidator(new FormValidator(popupNewCard.popupForm, validationConfig));
 
-  popupNewCard.setEventListeners();
 
   const newCardButton = document.querySelector('.profile__add-button');
   //открытие попапа карточки
@@ -150,12 +151,6 @@ profileEditButton.addEventListener('click', () => {
 avatarEdit.addEventListener('click', () => {
   popupAvatar.openPopup();
 });
-
-
-
-
-
-
 
 // 5 мес массовая валидация
 enableValidation(validationConfig);
