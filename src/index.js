@@ -11,9 +11,20 @@ export const profileTitle = document.querySelector('.profile__title');
 export const profileSubtitle = document.querySelector('.profile__subtitle');
 export const profileAvatar = document.querySelector('.profile__avatar');
 
-
 const userInfo = new UserInfo(".profile__title", ".profile__subtitle", ".profile__avatar");
-userInfo.getUserInfo()
+const popupProfile = new PopupWithForm('.popup_profile');
+const popupAvatar = new PopupWithForm('.popup_new-avatar');
+
+
+api.getName()
+  .then(userData => {
+    userInfo.setUserInfo(userData);
+    profileAvatar.src = userData.avatar;
+  })
+.catch(err => {
+  console.log(err);
+});
+
 
 const popupNewCard = new PopupWithForm('.popup_new-card');
 
@@ -44,12 +55,14 @@ export const popupFormNewCard = document.querySelector('.popup__form_new-card');
 export const popBigPhotoCard = document.querySelector('.popup-photo-card');
 
 
-const popupProfile = new PopupWithForm('.popup_profile');
-const popupAvatar = new PopupWithForm('.popup_new-avatar');
-
 
 //открытие попапа профиля
 profileEditButton.addEventListener('click', () => {
+  const info = userInfo.getUserInfo();
+
+  popupProfile.setInputValue('#name', info.title);
+  popupProfile.setInputValue('#profession', info.subtitle);
+
   popupProfile.openPopup();
 });
 
@@ -64,9 +77,50 @@ newCardButton.addEventListener('click', () => {
   popupNewCard.openPopup(); // поправила на класс
 });
 
-popupProfile.setSubmitEventListener(userInfo.setUserInfo.bind(userInfo));
+// клик по кнопке отправке данных профиля (по кнопке Сохранить)
+popupProfile.setSubmitEventListener((event) => {
+  event.preventDefault();
 
-popupAvatar.setSubmitEventListener(userInfo.setUserAvatar.bind(userInfo));
+  popupProfile.setSubmitButtonText("Сохранить...");
+
+
+  const objForPrifile = {
+    name: popupProfile.getInputValue('#name'),
+    about: popupProfile.getInputValue('#profession')
+  }
+  api.editName(objForPrifile)
+    .then((userData) => {
+      //closePopup(popupProfile)
+      popupProfile.closePopup()
+      userInfo.setUserInfo(userData);
+    })
+    .finally(() => popupProfile.setSubmitButtonText("Сохранить"))
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+// клик по кнопке Сохранить попап Аватар
+popupAvatar.setSubmitEventListener((event) => {
+    event.preventDefault();
+
+    popupProfile.setSubmitButtonText("Сохранить...");
+
+    const objForAva = {
+      avatar: popupAvatar.getInputValue('#link-new-avatar'),
+    }
+
+    api.editAva(objForAva)
+      .then((data) => {
+        console.log(data)
+        popupAvatar.closePopup();
+        profileAvatar.src = data.avatar;
+      })
+      .finally(() => popupProfile.setSubmitButtonText("Сохранить"))
+      .catch((err) => {
+        console.log(err);
+      });
+});
 
 
 
