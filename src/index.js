@@ -4,6 +4,8 @@ import { enableValidation, validationConfig } from './components/Validate.js'
 import { api } from './components/Api.js'
 import { UserInfo } from './components/UserInfo.js'
 import { Sextion } from './components/Sextion.js'
+import { Card } from './components/Card.js'
+
 
 
 // константы редактированиz значения в попапе
@@ -12,9 +14,11 @@ export const profileSubtitle = document.querySelector('.profile__subtitle');
 export const profileAvatar = document.querySelector('.profile__avatar');
 
 const userInfo = new UserInfo(".profile__title", ".profile__subtitle", ".profile__avatar");
+
+// попапы
 const popupProfile = new PopupWithForm('.popup_profile');
 const popupAvatar = new PopupWithForm('.popup_new-avatar');
-
+const popupNewCard = new PopupWithForm('.popup_new-card');
 
 api.getName()
   .then(userData => {
@@ -26,13 +30,40 @@ api.getName()
 });
 
 
-const popupNewCard = new PopupWithForm('.popup_new-card');
-
 Promise.all([api.getCard(), api.getName()]).then(([cards, user]) => {
-  const section = new Sextion(cards, '.elements', user, popupNewCard);
-  section.renderer();
+  const section = new Sextion(cards, '.elements', (cardItem) => {
+    const card = new Card(cardItem, '.element', user);
+    const cardElement = card.createDOMCard();
+    section.elements.prepend(cardElement);
+  });
 
-  popupNewCard.setSubmitEventListener(section.addNewCard.bind(section));
+  section.render();
+
+  popupNewCard.setSubmitEventListener((event) => {
+    event.preventDefault();
+
+    popupNewCard.setSubmitButtonText("Сохранение...");
+
+    const objForCard = {
+      name: popupNewCard.getInputValue('#name-new-card'),
+      link: popupNewCard.getInputValue('#link-new-card')
+    }
+
+    api.addCard(objForCard)
+      .then((newCard) => {
+        const card = new Card(newCard, '.element', newCard.owner);
+        const cardElement = card.createDOMCard();
+        section.addItem(cardElement); //Добавление в DOM
+        popupNewCard.closePopup();
+        popupNewCard.resetForm();
+        popupNewCard.resetValidation();
+        popupNewCard.setSubmitButtonText("Сохранить");
+      })
+      .finally(() => popupNewCard.setSubmitButtonText("Сохранить"))
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 
 }).catch(err => {
   console.log(err);
