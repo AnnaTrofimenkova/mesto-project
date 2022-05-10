@@ -46,79 +46,10 @@ export class Popup {
   setEventListeners() {
     this._popup.addEventListener("click", (event) => {
       if (event.target.classList.contains("popup_opened")) {
-          this.closePopup();
+        this.closePopup();
       }
     })
   }
 
 }
 
-export class PopupWithImage extends Popup {
-  constructor(selector) {
-    super(selector)
-    this.popupCardTitle = document.querySelector(".popup-photo-card__title");
-    this.popupCardPhoto = document.querySelector(".popup-photo-card__photo");
-  }
-
-  // тут что-то типа эдд нью фото кард из класса кард
-  openPopup(name, link) {
-    this.popupCardTitle.textContent = name;
-    this.popupCardPhoto.src = link;
-    this.popupCardPhoto.alt = name;
-    super.openPopup();
-  }
-}
-
-export class PopupWithForm extends Popup {
-  constructor(selector, submitFormCallback) {
-    super(selector);
-    this._buttonSubmit = this._popup.querySelector('.popup__button');
-    this.popupForm = this._popup.querySelector('.popup__form');
-    this.submitFormCallback = submitFormCallback;
-  }
-
-  setFormValidator(formValidator) {
-    this._formValidator = formValidator;
-  }
-
-  setSubmitButtonText(text) {
-    this._buttonSubmit.textContent = text;
-  }
-
-  setInputValue(inputSelector, value) {
-    const input = this._popup.querySelector(inputSelector);
-    input.value = value;
-  }
-
-  setSubmitEventListener(listenerFunction) {
-    this._buttonSubmit.addEventListener('click', listenerFunction);
-  }
-
-  closePopup() {
-    super.closePopup();
-    this.popupForm.reset();
-  }
-
-  resetValidation() {
-    console.log("'hdfjkdkf");
-   this._formValidator.enableValidation();
-  }
-
-  _getInputValues() {
-		const inputs = this.popupForm.querySelectorAll('.popup__input');
-		const inputValues = {};
-
-		inputs.forEach(input => {
-			inputValues[input.name] = input.value;
-		});
-		return inputValues;
-	}
-
-  setEventListeners() {
-    super.setEventListeners();
-    this.popupForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      this.submitFormCallback(this._getInputValues());
-    })
-  }
-}

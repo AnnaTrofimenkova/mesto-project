@@ -1,5 +1,6 @@
 import './pages/index.css';
-import { PopupWithForm, PopupWithImage } from './components/Popup'
+import { PopupWithForm } from './components/PopupWithForm'
+import { PopupWithImage } from './components/PopupWithImage'
 import { enableValidation, FormValidator, validationConfig } from './components/Validate.js'
 import { api } from './components/Api.js'
 import { UserInfo } from './components/UserInfo.js'
