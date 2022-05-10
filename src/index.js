@@ -3,7 +3,7 @@ import { PopupWithForm, PopupWithImage } from './components/Popup'
 import { enableValidation, FormValidator, validationConfig } from './components/Validate.js'
 import { api } from './components/Api.js'
 import { UserInfo } from './components/UserInfo.js'
-import { Sextion } from './components/Sextion.js'
+import { Section } from './components/Section.js'
 import { Card } from './components/Card.js'
 
 
@@ -66,13 +66,13 @@ api.getName()
     userInfo.setUserInfo(userData);
     profileAvatar.src = userData.avatar;
   })
-.catch(err => {
-  console.log(err);
-});
+  .catch(err => {
+    console.log(err);
+  });
 
 
 Promise.all([api.getCard(), api.getName()]).then(([cards, user]) => {
-  const section = new Sextion(cards, '.elements', (cardItem) => {
+  const section = new Section(cards, '.elements', (cardItem) => {
     const card = new Card(cardItem, '.element', user, popupWithImage);
     const cardElement = card.createDOMCard();
     section.elements.prepend(cardElement);
@@ -101,10 +101,10 @@ Promise.all([api.getCard(), api.getName()]).then(([cards, user]) => {
       .catch((err) => {
         console.log(err);
       });
-    });
-    
-    popupNewCard.setEventListeners();
-    popupNewCard.setFormValidator(new FormValidator(popupNewCard.popupForm, validationConfig));
+  });
+
+  popupNewCard.setEventListeners();
+  popupNewCard.setFormValidator(new FormValidator(popupNewCard.popupForm, validationConfig));
 
 
   const newCardButton = document.querySelector('.profile__add-button');

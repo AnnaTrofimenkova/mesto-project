@@ -1,5 +1,5 @@
 
-export class Sextion { // Sextion)::;))))//
+export class Section { // Section)::;))))//
   constructor(cards, selector, renderer) {
     this.cards = cards;
     this.elements = document.querySelector(selector);
