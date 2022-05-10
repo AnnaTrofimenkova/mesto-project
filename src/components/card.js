@@ -1,6 +1,5 @@
 
 
-import { api } from './Api.js'
 
 
 //константы СОЗДАНИЯ новой карточки
@@ -12,15 +11,18 @@ export const inputName = document.querySelector('#name');
 export const inputProfession = document.querySelector('#profession');
 
 
-
 export class Card {
-  constructor(data, templateSelector, user, popupWithImage) {
+  constructor({ cardItem, handleCardClick, handleLikeClick, handleDeleteIconClick, handleButtonLike  }, templateSelector) {
 
-    this.data = data;
+    this.data = cardItem;
+    this.handleCardClick = handleCardClick;
+    this.handleLikeClick = handleLikeClick;
+    this.handleDeleteIconClick = handleDeleteIconClick;
+    this.handleButtonLike = handleButtonLike;
     this._templateSelector = templateSelector;
-    this._popup = popupWithImage;
-    this.user = user;
+
   }
+
 
   //функция СОЗДАНИЯ новой карточки
   createDOMCard() {
@@ -32,28 +34,16 @@ export class Card {
     countLikes.textContent = this.data.likes.length;// 5 месяц лайки
     cardImage.src = this.data.link;
     cardImage.alt = this.data.name;
-    cardImage.addEventListener('click', () => {
-      this._addNewPhotoCard();
-    });
+    cardImage.addEventListener('click', this.handleCardClick);
     buttonLikes.addEventListener('click', (evt) => {
-      this._toggleLike(evt, this.data, countLikes);
+      this.handleLikeClick(evt, this.data, countLikes);
     });
-    if (this.data.owner._id === this.user._id) {
-      elementCard.querySelector('.element__tresh').addEventListener('click', (evt) => {
-        api.deleteCard(this.data._id)
-          .then(() => {
-            this._removeCardFromDOM(evt)
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      });
-    } else {
-      elementCard.querySelector('.element__tresh').classList.add("element__tresh-nonActive");// удалить значек мусорник
-    }
-    if (this.data.likes.find((like) => like._id === this.user._id) ? true : false) {
-      buttonLikes.classList.add('element__like_active');
-    };
+    this.handleDeleteIconClick(elementCard, this._removeCardFromDOM);
+
+    this.handleButtonLike(() => {
+     buttonLikes.classList.add('element__like_active');
+    })
+
 
     // функция удаления по мусорнику в создании новой карточки
     return elementCard;
@@ -63,40 +53,6 @@ export class Card {
   _removeCardFromDOM(evt) {
     const target = evt.target;
     target.closest('.element').remove()
-  }
-
-
-  _toggleLike(evt, item, countLikes) {
-    if (item.likes.find((like) => like._id === this.user._id) ? true : false) {
-      console.log("хочу удалить лайк")
-      api.delLike(item._id)
-        .then((data) => {
-          countLikes.textContent = data.likes.length//выводит новое значения лайка
-          item.likes = data.likes;
-          evt.target.classList.remove('element__like_active');
-
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    else {
-      console.log("хочу поставить лайк")
-      api.editLike(item._id)
-        .then((data) => {
-          countLikes.textContent = data.likes.length//выводит новое значения лайка
-          item.likes = data.likes;
-          evt.target.classList.add('element__like_active');
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-  }
-
-  // функция добавления большой картинки
-  _addNewPhotoCard() {
-    this._popup.openPopup(this.data.name, this.data.link);
   }
 
 }
