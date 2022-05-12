@@ -5,7 +5,7 @@ export class FormValidator {
   constructor(formElement, config) {
     this.config = config;
     this.formElement = formElement;
-    this.submitButton = this.formElement.querySelector(this.config.submitButtonSelector);
+    this.submitButton = this.formElement.querySelector(this.config.submitButtonSelector);//нахожу свою кнопку сохранить
   }
 
   _showError(errorElement, inputElement) {
@@ -29,6 +29,7 @@ export class FormValidator {
     }
   }
 
+
   _toggleButtonState(isActive) {
     if (isActive) {
       this.submitButton.classList.remove(this.config.inactiveButtonClass);
@@ -38,7 +39,6 @@ export class FormValidator {
       this.submitButton.disabled = 'disabled';
     }
   }
-
 
   _setEventListers() {
     const inputsList = this.formElement.querySelectorAll(this.config.inputSelector);
@@ -53,6 +53,7 @@ export class FormValidator {
 
     this.formElement.addEventListener('submit', (evt) => {
       evt.preventDefault();
+
     })
   }
 

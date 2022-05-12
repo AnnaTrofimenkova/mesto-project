@@ -32,7 +32,6 @@ export class PopupWithForm extends Popup {
   }
 
   resetValidation() {
-   // console.log("'hdfjkdkf");
     this._formValidator.enableValidation();
   }
 

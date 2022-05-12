@@ -1,7 +1,7 @@
 import './pages/index.css';
 import { PopupWithForm } from './components/PopupWithForm'
 import { PopupWithImage } from './components/PopupWithImage'
-import { enableValidation, FormValidator, validationConfig } from './components/Validate.js'
+import { enableValidation, FormValidator, validationConfig } from './components/FormValidator.js'
 import { api } from './components/Api.js'
 import { UserInfo } from './components/UserInfo.js'
 import { Section } from './components/Section.js'
@@ -187,8 +187,6 @@ Promise.all([api.getCard(), api.getName()]).then(([cards, user]) => {
     popupNewCard.openPopup(); // поправила на класс
   });
 
-
-
 }).catch(err => {
   console.log(err);
 });
@@ -196,15 +194,12 @@ Promise.all([api.getCard(), api.getName()]).then(([cards, user]) => {
 
 // попап редактирования профиля
 const profileEditButton = document.querySelector('.profile__edit-button');
-
-
 const avatarEdit = document.querySelector('.profile__avatar-cont');// 5 месяц
 
 
 //попап новой карточки
 
 export const popupFormNewCard = document.querySelector('.popup__form_new-card');
-
 
 //фото карточек
 export const popBigPhotoCard = document.querySelector('.popup-photo-card');
@@ -214,10 +209,8 @@ export const popBigPhotoCard = document.querySelector('.popup-photo-card');
 //открытие попапа профиля
 profileEditButton.addEventListener('click', () => {
   const info = userInfo.getUserInfo();
-
   popupProfile.setInputValue('#name', info.title);
   popupProfile.setInputValue('#profession', info.subtitle);
-
   popupProfile.openPopup();
 });
 
@@ -228,4 +221,5 @@ avatarEdit.addEventListener('click', () => {
 
 // 5 мес массовая валидация
 enableValidation(validationConfig);
+
 
