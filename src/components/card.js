@@ -1,16 +1,5 @@
 
 
-
-
-//константы СОЗДАНИЯ новой карточки
-const elementThere = document.querySelector('#element-template').content;//их версия
-
-// константы добавления новой карточки
-
-export const inputName = document.querySelector('#name');
-export const inputProfession = document.querySelector('#profession');
-
-
 export class Card {
   constructor({ cardItem, handleCardClick, handleLikeClick, handleDeleteIconClick, handleButtonLike  }, templateSelector) {
 
@@ -21,12 +10,15 @@ export class Card {
     this.handleButtonLike = handleButtonLike;
     this._templateSelector = templateSelector;
 
+    //константы СОЗДАНИЯ новой карточки
+    this._elementThere = document.querySelector('#element-template').content;//их версия
+
   }
 
 
   //функция СОЗДАНИЯ новой карточки
   createDOMCard() {
-    const elementCard = elementThere.querySelector(this._templateSelector).cloneNode(true);
+    const elementCard = this._elementThere.querySelector(this._templateSelector).cloneNode(true);
     const cardImage = elementCard.querySelector('.element__photo');
     const countLikes = elementCard.querySelector('.element__count-likes');
     const buttonLikes = elementCard.querySelector('.element__like');

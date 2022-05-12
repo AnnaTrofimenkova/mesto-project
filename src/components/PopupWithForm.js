@@ -9,6 +9,15 @@ export class PopupWithForm extends Popup {
     this.submitFormCallback = submitFormCallback;
   }
 
+
+  closePopup() {
+    super.closePopup();
+    this.popupForm.reset();
+    if (this._formValidator) {
+      this._formValidator.toggleButtonState(false);
+    }
+  }
+
   setFormValidator(formValidator) {
     this._formValidator = formValidator;
   }
@@ -26,15 +35,9 @@ export class PopupWithForm extends Popup {
     this._buttonSubmit.addEventListener('click', listenerFunction);
   }
 
-  closePopup() {
-    super.closePopup();
-    this.popupForm.reset();
-  }
-
   resetValidation() {
     this._formValidator.enableValidation();
   }
-
   _getInputValues() {
     const inputs = this.popupForm.querySelectorAll('.popup__input');
     const inputValues = {};
