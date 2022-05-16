@@ -39,6 +39,7 @@ const popupProfile = new PopupWithForm('.popup_profile', (inputValues) => {
 });
 
 popupProfile.setEventListeners();
+popupProfile.setFormValidator(new FormValidator(popupProfile.popupForm, validationConfig));
 
 const popupAvatar = new PopupWithForm('.popup_new-avatar', (inputValues) => {
   popupAvatar.setSubmitButtonText("Сохранить...");
@@ -59,10 +60,9 @@ const popupAvatar = new PopupWithForm('.popup_new-avatar', (inputValues) => {
 });
 
 popupAvatar.setEventListeners();
+popupAvatar.setFormValidator(new FormValidator(popupAvatar.popupForm, validationConfig));
 
 const popupWithImage = new PopupWithImage('.popup-photo-card');
-
-
 
 
 const createCardHandlers = (cardItem, user) => {
@@ -71,53 +71,49 @@ const createCardHandlers = (cardItem, user) => {
       //...что должно произойти при клике на картинку
       popupWithImage.openPopup(cardItem.name, cardItem.link);
     },
-    handleLikeClick: (evt, item, countLikes) => {
+    handleLikeClick: (item, countLikes, addLikeActiveCallback, removeLikeActiveCallback) => {
       // ...что должно произойти при клике на лайк
 
-        // _toggleLike(evt, item, countLikes) {
-    if (item.likes.find((like) => like._id === user._id) ? true : false) {
-      console.log("хочу удалить лайк")
-      api.delLike(item._id)
-        .then((data) => {
-          countLikes.textContent = data.likes.length//выводит новое значения лайка
-          item.likes = data.likes;
-          evt.target.classList.remove('element__like_active');
+      // _toggleLike(evt, item, countLikes) {
 
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    else {
-      console.log("хочу поставить лайк")
-      api.editLike(item._id)
-        .then((data) => {
-          countLikes.textContent = data.likes.length//выводит новое значения лайка
-          item.likes = data.likes;
-          evt.target.classList.add('element__like_active');
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-  // }
-    },
-    handleDeleteIconClick: (elementCard, removeCardFromDOMCallback ) => {
-      // ...что должно произойти при клике на удаление
-      if (cardItem.owner._id === user._id) {
-
-      elementCard.querySelector('.element__tresh').addEventListener('click', (evt) => {
-        api.deleteCard(cardItem._id)
-          .then(() => {
-            removeCardFromDOMCallback(evt)
+      if (item.likes.find((like) => like._id === user._id) ? true : false) {
+        api.delLike(item._id)
+          .then((data) => {
+            countLikes.textContent = data.likes.length; //выводит новое значения лайка
+            item.likes = data.likes;
+            removeLikeActiveCallback();
           })
           .catch((err) => {
             console.log(err);
           });
-      });
-    } else {
-      elementCard.querySelector('.element__tresh').classList.add("element__tresh-nonActive");// удалить значек мусорник
-    }
+      } else {
+        api.editLike(item._id)
+          .then((data) => {
+            countLikes.textContent = data.likes.length; //выводит новое значения лайка
+            item.likes = data.likes;
+            addLikeActiveCallback();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    },
+    handleDeleteIconClick: (trashElement, removeCardFromDOMCallback, removeElementTrashCallback) => {
+      // ...что должно произойти при клике на удаление
+      if (cardItem.owner._id === user._id) {
+
+        trashElement.addEventListener('click', (evt) => {
+          api.deleteCard(cardItem._id)
+            .then(() => {
+              removeCardFromDOMCallback(evt)
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        });
+      } else {
+        removeElementTrashCallback(); // удалить значек мусорник
+      }
     },
     handleButtonLike: (addLikeCallback) => {
       if (cardItem.likes.find((like) => like._id === user._id) ? true : false) {
