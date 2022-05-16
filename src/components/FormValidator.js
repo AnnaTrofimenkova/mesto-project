@@ -5,7 +5,7 @@ export class FormValidator {
   constructor(formElement, config) {
     this.config = config;
     this.formElement = formElement;
-    this.submitButton = this.formElement.querySelector(this.config.submitButtonSelector);
+    this.submitButton = this.formElement.querySelector(this.config.submitButtonSelector);//нахожу свою кнопку сохранить
   }
 
   _showError(errorElement, inputElement) {
@@ -18,18 +18,21 @@ export class FormValidator {
     inputElement.classList.remove(this.config.inputErrorClass)
   }
 
-  _checkInputValidity(inputElement) {
+  checkInputValidity(inputElement) {
     const isInputNotValid = !inputElement.validity.valid;
     const errorElement = this.formElement.querySelector(`.${inputElement.id}-error`);
 
     if (isInputNotValid) {
       this._showError(errorElement, inputElement);
+      this.toggleButtonState(false);
     } else {
       this._hideError(errorElement, inputElement);
+      this.toggleButtonState(true);
     }
   }
 
-  _toggleButtonState(isActive) {
+
+  toggleButtonState(isActive) {
     if (isActive) {
       this.submitButton.classList.remove(this.config.inactiveButtonClass);
       this.submitButton.disabled = false;
@@ -39,20 +42,15 @@ export class FormValidator {
     }
   }
 
-
   _setEventListers() {
     const inputsList = this.formElement.querySelectorAll(this.config.inputSelector);
 
     Array.from(inputsList).forEach(inputElement => {
       inputElement.addEventListener('input', () => {
         const isFormValid = this.formElement.checkValidity();
-        this._checkInputValidity(inputElement)
-        this._toggleButtonState(isFormValid)
+        this.checkInputValidity(inputElement)
+        this.toggleButtonState(isFormValid)
       })
-    })
-
-    this.formElement.addEventListener('submit', (evt) => {
-      evt.preventDefault();
     })
   }
 

@@ -1,6 +1,6 @@
 
 export class UserInfo {
-  constructor(profileTitleSelector, profileSubtitleSelector, avatarSelector) {
+  constructor(profileTitleSelector, profileSubtitleSelector) {
     // получить лементы из страницы title & subtitle & avatar
     this._profileTitle = document.querySelector(profileTitleSelector);
     this._profileSubtitle = document.querySelector(profileSubtitleSelector);
