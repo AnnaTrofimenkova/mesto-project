@@ -35,10 +35,10 @@ export class Popup {
   //клик по esc
   _handleEscClose(evt) {
     if (evt.key == 'Escape') {
-      const openedPopup = document.querySelector(".popup_opened")
-      if (openedPopup) {
-        this.closePopup(openedPopup);
-      }
+      //const openedPopup = document.querySelector(".popup_opened")
+     // if (openedPopup) {
+      this.closePopup();//(openedPopup);
+      //}
     }
   }
 
