@@ -6,6 +6,8 @@ export class FormValidator {
     this.config = config;
     this.formElement = formElement;
     this.submitButton = this.formElement.querySelector(this.config.submitButtonSelector);//нахожу свою кнопку сохранить
+    this.inputsList = this.formElement.querySelectorAll(this.config.inputSelector);
+    this.setEventListers();
   }
 
   _showError(errorElement, inputElement) {
@@ -14,8 +16,18 @@ export class FormValidator {
   }
 
   _hideError(errorElement, inputElement) {
-    errorElement.textContent = inputElement.validationMessage;
+    errorElement.textContent = '';
     inputElement.classList.remove(this.config.inputErrorClass)
+  }
+
+  resetInputs() {
+    this.formElement.reset();
+    // сбросить сообщения об ошибках
+    this.inputsList.forEach((inputElement) => {
+      const errorSpan = this.formElement.querySelector(`.${inputElement.id}-error`);
+      this._hideError(errorSpan, inputElement);
+    });
+
   }
 
   checkInputValidity(inputElement) {
@@ -42,10 +54,8 @@ export class FormValidator {
     }
   }
 
-  _setEventListers() {
-    const inputsList = this.formElement.querySelectorAll(this.config.inputSelector);
-
-    Array.from(inputsList).forEach(inputElement => {
+  setEventListers() {
+    Array.from(this.inputsList).forEach(inputElement => {
       inputElement.addEventListener('input', () => {
         const isFormValid = this.formElement.checkValidity();
         this.checkInputValidity(inputElement)
@@ -54,23 +64,8 @@ export class FormValidator {
     })
   }
 
-  enableValidation() {
-    this._setEventListers();
-  }
 
 }
-
-
-export const enableValidation = ({ formSelector, ...rest }) => {
-  const forms = document.querySelectorAll(formSelector);
-  Array.from(forms).forEach(formElement => {
-    const formValidator = new FormValidator(formElement, rest)
-    formValidator.enableValidation()
-
-  })
-
-}
-
 
 export const validationConfig = {
   formSelector: '.popup__form',//ok

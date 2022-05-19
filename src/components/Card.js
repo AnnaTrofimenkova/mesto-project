@@ -1,5 +1,3 @@
-
-
 export class Card {
   constructor({ cardItem, handleCardClick, handleLikeClick, handleDeleteIconClick, handleButtonLike  }, templateSelector) {
     this.data = cardItem;
