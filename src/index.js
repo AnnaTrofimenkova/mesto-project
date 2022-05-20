@@ -98,14 +98,14 @@ const createCardHandlers = (cardItem, user) => {
           });
       }
     },
-    handleDeleteIconClick: (trashElement, removeCardFromDOMCallback, removeElementTrashCallback) => {
+        handleDeleteIconClick: (thisCard, removeCardFromDOMCallback, removeElementTrashCallback) => {
       // ...что должно произойти при клике на удаление
       if (cardItem.owner._id === user._id) {
 
-        trashElement.addEventListener('click', (evt) => {
+        thisCard.setTrashEventListener(() => {
           api.deleteCard(cardItem._id)
             .then(() => {
-              removeCardFromDOMCallback(evt)
+              removeCardFromDOMCallback()
             })
             .catch((err) => {
               console.log(err);
