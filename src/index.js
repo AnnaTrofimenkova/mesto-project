@@ -63,7 +63,7 @@ popupAvatar.setEventListeners();
 popupAvatar.setFormValidator(new FormValidator(popupAvatar.popupForm, validationConfig));
 
 const popupWithImage = new PopupWithImage('.popup-photo-card');
-
+popupWithImage.setEventListeners() //Аня
 
 const createCardHandlers = (cardItem, user) => {
   return {
@@ -140,7 +140,8 @@ Promise.all([api.getCard(), api.getName()]).then(([cards, user]) => {
     const handlers = createCardHandlers(cardItem, user);
     const cardElement = createCard(cardItem, handlers);
     // обращаемся к единственному экземпляру класса Section через замыкание
-    section.elements.prepend(cardElement);
+    //section.elements.prepend(cardElement);
+    section.addItem(cardElement)
   });
 
   section.render();

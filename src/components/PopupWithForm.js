@@ -34,9 +34,9 @@ export class PopupWithForm extends Popup {
     input.value = value;
   }
 
-  setSubmitEventListener(listenerFunction) {
-    this._buttonSubmit.addEventListener('click', listenerFunction);
-  }
+  // setSubmitEventListener(listenerFunction) {
+  //   this._buttonSubmit.addEventListener('click', listenerFunction);
+  // }
 
 
   _getInputValues() {
