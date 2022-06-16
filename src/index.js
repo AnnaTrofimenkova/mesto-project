@@ -12,7 +12,7 @@ import { Card } from './components/Card.js'
 // константы редактированиz значения в попапе
 export const profileTitle = document.querySelector('.profile__title');
 export const profileSubtitle = document.querySelector('.profile__subtitle');
-export const profileAvatar = document.querySelector('.profile__avatar');
+
 
 const userInfo = new UserInfo(".profile__title", ".profile__subtitle", ".profile__avatar");
 
@@ -51,7 +51,7 @@ const popupAvatar = new PopupWithForm('.popup_new-avatar', (inputValues) => {
   api.editAva(objForAva)
     .then((data) => {
       popupAvatar.closePopup();
-      profileAvatar.src = data.avatar;
+      userInfo.setAvatar(data.avatar);
     })
     .finally(() => popupAvatar.setSubmitButtonText("Сохранить"))
     .catch((err) => {
@@ -63,7 +63,7 @@ popupAvatar.setEventListeners();
 popupAvatar.setFormValidator(new FormValidator(popupAvatar.popupForm, validationConfig));
 
 const popupWithImage = new PopupWithImage('.popup-photo-card');
-
+popupWithImage.setEventListeners() //Аня
 
 const createCardHandlers = (cardItem, user) => {
   return {
@@ -98,14 +98,14 @@ const createCardHandlers = (cardItem, user) => {
           });
       }
     },
-    handleDeleteIconClick: (trashElement, removeCardFromDOMCallback, removeElementTrashCallback) => {
+        handleDeleteIconClick: (thisCard, removeCardFromDOMCallback, removeElementTrashCallback) => {
       // ...что должно произойти при клике на удаление
       if (cardItem.owner._id === user._id) {
 
-        trashElement.addEventListener('click', (evt) => {
+        thisCard.setTrashEventListener(() => {
           api.deleteCard(cardItem._id)
             .then(() => {
-              removeCardFromDOMCallback(evt)
+              removeCardFromDOMCallback()
             })
             .catch((err) => {
               console.log(err);
@@ -123,28 +123,25 @@ const createCardHandlers = (cardItem, user) => {
   }
 }
 
-
-
-
-
-api.getName()
-  .then(userData => {
-    userInfo.setUserInfo(userData);
-    profileAvatar.src = userData.avatar;
-  })
-  .catch(err => {
-    console.log(err);
-  });
+function createCard(cardData, handlers) {
+  // тут создаете карточку и возвращаете ее
+  const card = new Card({ cardItem: cardData, ...handlers }, '#element-template');
+  const cardElement = card.createDOMCard();
+  return cardElement;
+}
 
 
 Promise.all([api.getCard(), api.getName()]).then(([cards, user]) => {
+
+  userInfo.setUserInfo(user);
+  userInfo.setAvatar(user.avatar);
+
   const section = new Section(cards, '.elements', (cardItem) => {
     const handlers = createCardHandlers(cardItem, user);
-
-
-    const card = new Card({ cardItem, ...handlers }, '#element-template');
-    const cardElement = card.createDOMCard();
-    section.elements.prepend(cardElement);
+    const cardElement = createCard(cardItem, handlers);
+    // обращаемся к единственному экземпляру класса Section через замыкание
+    //section.elements.prepend(cardElement);
+    section.addItem(cardElement)
   });
 
   section.render();
@@ -160,12 +157,9 @@ Promise.all([api.getCard(), api.getName()]).then(([cards, user]) => {
     api.addCard(objForCard)
       .then((newCard) => {
         const handlers = createCardHandlers(newCard, newCard.owner);
-        const card = new Card({ cardItem: newCard, ...handlers }, '#element-template');
-        const cardElement = card.createDOMCard();
+        const cardElement = createCard(newCard, handlers);
         section.addItem(cardElement); //Добавление в DOM
         popupNewCard.closePopup();
-        popupNewCard.resetValidation();
-        popupNewCard.setSubmitButtonText("Сохранить");
       })
       .finally(() => popupNewCard.setSubmitButtonText("Сохранить"))
       .catch((err) => {
@@ -214,8 +208,4 @@ profileEditButton.addEventListener('click', () => {
 avatarEdit.addEventListener('click', () => {
   popupAvatar.openPopup();
 });
-
-// 5 мес массовая валидация
-enableValidation(validationConfig);
-
 

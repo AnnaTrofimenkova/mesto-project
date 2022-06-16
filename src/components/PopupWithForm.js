@@ -1,4 +1,5 @@
 
+
 import { Popup } from './Popup'
 
 export class PopupWithForm extends Popup {
@@ -7,13 +8,15 @@ export class PopupWithForm extends Popup {
     this._buttonSubmit = this._popup.querySelector('.popup__button');
     this.popupForm = this._popup.querySelector('.popup__form');
     this.submitFormCallback = submitFormCallback;
+    this.inputs = this.popupForm.querySelectorAll('.popup__input');
   }
 
 
   closePopup() {
     super.closePopup();
-    this.popupForm.reset();
+
     if (this._formValidator) {
+      this._formValidator.resetInputs();
       this._formValidator.toggleButtonState(false);
     }
   }
@@ -31,18 +34,16 @@ export class PopupWithForm extends Popup {
     input.value = value;
   }
 
-  setSubmitEventListener(listenerFunction) {
-    this._buttonSubmit.addEventListener('click', listenerFunction);
-  }
+  // setSubmitEventListener(listenerFunction) {
+  //   this._buttonSubmit.addEventListener('click', listenerFunction);
+  // }
 
-  resetValidation() {
-    this._formValidator.enableValidation();
-  }
+
   _getInputValues() {
-    const inputs = this.popupForm.querySelectorAll('.popup__input');
+
     const inputValues = {};
 
-    inputs.forEach(input => {
+    this.inputs.forEach(input => {
       inputValues[input.name] = input.value;
     });
     return inputValues;
